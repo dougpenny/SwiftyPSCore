@@ -1,7 +1,7 @@
 //
 //    Courses.swift
 //
-//    Copyright (c) 2018 Doug Penny – North Raleigh Christian Academy
+//    Copyright (c) 2018 Cooper Edmunds & Doug Penny – North Raleigh Christian Academy
 //
 //    Permission is hereby granted, free of charge, to any person obtaining a copy
 //    of this software and associated documentation files (the "Software"), to deal
@@ -23,15 +23,19 @@
 
 
 public struct Courses: Codable {
-    public let coursesWrapper: CourseContainer?
+    private let coursesWrapper: CourseContainer?
 
+    public var data: [Course]? {
+        return self.coursesWrapper?.courses
+    }
+    
     enum CodingKeys: String, CodingKey {
         case coursesWrapper = "courses"
     }
 }
 
-public struct CourseContainer: Codable {
-    public let courses: [Course]?
+private struct CourseContainer: Codable {
+    let courses: [Course]?
 
     enum CodingKeys: String, CodingKey {
         case courses = "course"

@@ -41,11 +41,10 @@ class SwiftyPowerSchoolTests: XCTestCase {
             let decoder = JSONDecoder()
             do {
                 let allCourses = try decoder.decode(Courses.self, from: data)
-                if let coursesWrapper = allCourses.coursesWrapper {
-                    if let courses = coursesWrapper.courses {
-                        XCTAssertEqual(courses[0].id, 2135)
-                        XCTAssertEqual(courses[0].number, "CSC101")
-                    } else { XCTFail() }
+                if let courses = allCourses.data {
+                    XCTAssertEqual(courses.count, 1)
+                    XCTAssertEqual(courses[0].id, 2135)
+                    XCTAssertEqual(courses[0].number, "CSC101")
                 } else { XCTFail() }
             }
             catch let parseError {
