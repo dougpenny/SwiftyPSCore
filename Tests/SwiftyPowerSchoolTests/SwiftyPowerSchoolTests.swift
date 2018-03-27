@@ -50,9 +50,54 @@ class SwiftyPowerSchoolTests: XCTestCase {
             }
         }
     }
+    
+    func testSectionModel() {
+        let jsonSectionsExample =
+"""
+{"sections":{"@expansions":"term","@extensions":"s_sec_crdc_x,s_sec_edfi_x","section":[{"id":1500,"school_id":3,"course_id":1391,"term_id":1989,"section_number":5,"expression":"8(A-E)","external_expression":"6(M-F)","staff_id":3955,"gradebooktype":"PTG"},{"id":15919,"school_id":3,"course_id":1391,"term_id":1989,"section_number":6,"expression":"9(A-E)","external_expression":"7(M-F)","staff_id":3955,"gradebooktype":"PTG"}]}}
+"""
+        if let data = jsonSectionsExample.data(using: .utf8) {
+            let decoder = JSONDecoder()
+            do {
+                let allSections = try decoder.decode(Sections.self, from: data)
+                if let sections = allSections.data {
+                    XCTAssertEqual(sections.count, 2)
+                    XCTAssertEqual(sections[0].id, 1500)
+                    XCTAssertEqual(sections[0].expression, "8(A-E)")
+                    XCTAssertEqual(sections[1].staffID, 3955)
+                    XCTAssertEqual(sections[1].gradebookType, "PTG")
+                } else { XCTFail() }
+            }
+            catch let parseError {
+                XCTFail(parseError.localizedDescription)
+            }
+        }
+    }
+    func testResourceCountModel() {
+        let jsonResourceCountExample =
+"""
+{"resource":{"count":20}}
+"""
+        if let data = jsonResourceCountExample.data(using: .utf8) {
+            let decoder = JSONDecoder()
+            do {
+                let resourceCount = try decoder.decode(ResourceCount.self, from: data)
+                
+                if let count = resourceCount.count {
+                    XCTAssertEqual(count, 20)
+                } else { XCTFail() }
+            }
+            catch let parseError {
+                XCTFail(parseError.localizedDescription)
+            }
+        }
+    }
+   
 
     static var allTests = [
         ("testSchoolModel", testSchoolModel),
         ("testCourseModel", testCourseModel),
+        ("testSectionModel", testSectionModel),
+        ("testResourceCountModel", testResourceCountModel),
     ]
 }

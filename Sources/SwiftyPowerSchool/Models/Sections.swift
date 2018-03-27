@@ -1,7 +1,7 @@
 //
 //    Sections.swift
 //
-//    Copyright (c) 2018 Doug Penny – North Raleigh Christian Academy
+//    Copyright (c) 2018 Cooper Edmunds & Doug Penny – North Raleigh Christian Academy
 //
 //    Permission is hereby granted, free of charge, to any person obtaining a copy
 //    of this software and associated documentation files (the "Software"), to deal
@@ -23,14 +23,16 @@
 
 
 public struct Sections: Codable {
-    public let sectionsWrapper: SectionContainer?
-
+    private let sectionsWrapper: SectionContainer?
+    public var data: [Section]? {
+        return sectionsWrapper?.sections
+    }
     enum CodingKeys: String, CodingKey {
         case sectionsWrapper = "sections"
     }
 }
 
-public struct SectionContainer: Codable {
+private struct SectionContainer: Codable {
     public let sections: [Section]?
 
     enum CodingKeys: String, CodingKey {
