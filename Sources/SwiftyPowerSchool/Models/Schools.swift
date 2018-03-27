@@ -1,7 +1,7 @@
 //
 //    Schools.swift
 //
-//    Copyright (c) 2018 Doug Penny – North Raleigh Christian Academy
+//    Copyright (c) 2018 Cooper Edmunds & Doug Penny – North Raleigh Christian Academy
 //
 //    Permission is hereby granted, free of charge, to any person obtaining a copy
 //    of this software and associated documentation files (the "Software"), to deal
@@ -23,14 +23,16 @@
 
 
 public struct Schools: Codable {
-    public let schoolsWrapper: SchoolsContainer?
-
+    private let schoolsWrapper: SchoolsContainer?
+    public var data: [School]? {
+        return schoolsWrapper?.schools
+    }
     enum CodingKeys: String, CodingKey {
         case schoolsWrapper = "schools"
     }
 }
 
-public struct SchoolsContainer: Codable {
+private struct SchoolsContainer: Codable {
     public let schools: [School]?
 
     enum CodingKeys: String, CodingKey {

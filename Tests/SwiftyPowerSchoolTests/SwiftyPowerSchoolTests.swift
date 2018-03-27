@@ -11,18 +11,16 @@ class SwiftyPowerSchoolTests: XCTestCase {
             let decoder = JSONDecoder()
             do {
                 let allSchools = try decoder.decode(Schools.self, from: data)
-                if let schoolsWrapper = allSchools.schoolsWrapper {
-                    if let schools = schoolsWrapper.schools {
-                        XCTAssertEqual(schools[0].schoolNumber, 3)
-                        if let city = schools[0].addresses?.physical?.city {
-                            XCTAssertEqual(city, "Big City")
-                        } else { XCTFail() }
-                        if let firstName = schools[0].principal?.name?.firstName {
-                            XCTAssertEqual(firstName, "Thomas")
-                        } else { XCTFail() }
-                        if let email = schools[0].principal?.email {
-                            XCTAssertEqual(email, "tj@gwhs.com")
-                        } else { XCTFail() }
+                if let schools = allSchools.data {
+                    XCTAssertEqual(schools[0].schoolNumber, 3)
+                    if let city = schools[0].addresses?.physical?.city {
+                        XCTAssertEqual(city, "Big City")
+                    } else { XCTFail() }
+                    if let firstName = schools[0].principal?.name?.firstName {
+                        XCTAssertEqual(firstName, "Thomas")
+                    } else { XCTFail() }
+                    if let email = schools[0].principal?.email {
+                        XCTAssertEqual(email, "tj@gwhs.com")
                     } else { XCTFail() }
                 } else { XCTFail() }
             }
