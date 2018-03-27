@@ -21,42 +21,42 @@ Now you can use your client to retrieve:
 
 * Schools
 <pre><code class="swift language-swift">client.getSchools() { schools, error in
-if let schools = schools {
-print("Array of schools: \(schools)")
-}
-else {
-print(error?.localizedDescription ?? "Generic error")
-}
+  if let schools = schools {
+    print("Array of schools: \(schools)")
+  }
+  else {
+    print(error?.localizedDescription ?? "Generic error")
+  }
 }</code></pre>
 
 * Courses
 <pre><code class="swift language-swift">client.getCoursesFromSchool(1) { courses, error in
-if let courses = courses {
-print("Array of courses: \(courses)")
-}
-else {
-print(error?.localizedDescription ?? "Generic error")
-}
+  if let courses = courses {
+    print("Array of courses: \(courses)")
+  }
+  else {
+    print(error?.localizedDescription ?? "Generic error")
+  }
 }</code></pre>
 
 * Sections
 <pre><code class="swift language-swift">client.getSectionsFromSchool(3) { sections, error in
-if let sections = sections {
-print("Array of sections: \(sections)")
-}
-else {
-print(error?.localizedDescription ?? "Generic error")
-}
+  if let sections = sections {
+    print("Array of sections: \(sections)")
+  }
+  else {
+    print(error?.localizedDescription ?? "Generic error")
+  }
 }</code></pre>
 
 * Number of schools
 <pre><code class="swift language-swift">client.getSchoolsCount() { schoolsCount, error in
-if let schoolsCount = schoolsCount {
-print("Number of schools: \(schoolsCount)")
-}
-else {
-print(error?.localizedDescription ?? "Generic error 2")
-}
+  if let schoolsCount = schoolsCount {
+    print("Number of schools: \(schoolsCount)")
+  }
+  else {
+    print(error?.localizedDescription ?? "Generic error 2")
+  }
 }</code></pre>
 
 ## License
