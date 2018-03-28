@@ -1,5 +1,5 @@
-# SwiftyPowerSchool
-
+![SwiftyPowerSchool](Images/swiftypowerschool.png)
+# 
 [![Swift](https://img.shields.io/badge/Swift-4.0-orange.svg)](https://swift.org)
 [![MIT](https://img.shields.io/badge/License-MIT-red.svg)](https://opensource.org/licenses/MIT)
 
