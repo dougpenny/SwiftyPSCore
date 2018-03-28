@@ -1,10 +1,12 @@
 ![SwiftyPowerSchool](Images/swiftypowerschool.png)
-# 
+
 [![Swift](https://img.shields.io/badge/Swift-4.0-orange.svg)](https://swift.org)
-[![MIT](https://img.shields.io/badge/License-MIT-red.svg)](https://opensource.org/licenses/MIT)
+[![MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
 
-SwiftyPowerSchool is a swift PowerSchool client built to simplify the process of communicating with the PowerSchool API by handling authentication and decoding, allowing you to focus on using the data, not retrieving it.
+SwiftyPowerSchool is a pure Swift PowerSchool API client. Our goal is to simplify the process of communicating with the PowerSchool API by handling authentication and decoding, allowing you to focus on using the data, not retrieving it.
+
+_SwiftyPowerSchool is not endorsed, sponsored, or affilitated with PowerSchool in any way. Swift and the Swift logo are trademarks of Apple Inc._
 
 ## Installation
 
