@@ -1,0 +1,11 @@
+{
+    "baseURL": "",
+    "clientID": "",
+    "clientSecret": "",
+    "schoolsCount": 7,
+    "schoolNames": [],
+    "testSchool": {
+        "schoolNumber": 1,
+        "courseCount": 123
+    }
+}

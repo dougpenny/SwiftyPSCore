@@ -2,6 +2,13 @@ import XCTest
 @testable import SwiftyPowerSchool
 
 class SwiftyPowerSchoolTests: XCTestCase {
+    static var allTests = [
+        ("testSchoolModel", testSchoolModel),
+        ("testCourseModel", testCourseModel),
+        ("testSectionModel", testSectionModel),
+        ("testResourceCountModel", testResourceCountModel),
+    ]
+    
     func testSchoolModel() {
         let jsonSchoolsExample =
 """
@@ -92,12 +99,4 @@ class SwiftyPowerSchoolTests: XCTestCase {
             }
         }
     }
-   
-
-    static var allTests = [
-        ("testSchoolModel", testSchoolModel),
-        ("testCourseModel", testCourseModel),
-        ("testSectionModel", testSectionModel),
-        ("testResourceCountModel", testResourceCountModel),
-    ]
 }
