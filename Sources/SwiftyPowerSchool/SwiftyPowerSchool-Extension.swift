@@ -21,35 +21,34 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
-
 import Foundation
 
 extension SwiftyPowerSchool {
-    public func getSchools(completion: @escaping ([School]?, Error?) -> ()) {
+    public func getSchools(completion: @escaping ([School]?, Error?) -> Void) {
         let path = "/ws/v1/district/school"
         fetchData(path: path, model: Schools.self, method: "GET") {schoolsObj, error in
             let schools = schoolsObj?.data
             completion(schools, error)
         }
     }
-    
-    public func getCoursesFromSchool(_ schoolID: Int, completion: @escaping ([Course]?, Error?) -> ()) {
+
+    public func getCoursesFromSchool(_ schoolID: Int, completion: @escaping ([Course]?, Error?) -> Void) {
         let path = "/ws/v1/school/\(schoolID)/course"
         fetchData(path: path, model: Courses.self, method: "GET") {coursesObj, error in
             let courses = coursesObj?.data
             completion(courses, error)
         }
     }
-    
-    public func getSectionsFromSchool(_ schoolID: Int, completion: @escaping ([Section]?, Error?) -> ()) {
+
+    public func getSectionsFromSchool(_ schoolID: Int, completion: @escaping ([Section]?, Error?) -> Void) {
         let path = "/ws/v1/school/\(schoolID)/section"
         fetchData(path: path, model: Sections.self, method: "GET") {sectionsObj, error in
             let sections = sectionsObj?.data
             completion(sections, error)
         }
     }
-    
-    public func getSchoolsCount(completion: @escaping (Int?, Error?) -> ()) {
+
+    public func getSchoolsCount(completion: @escaping (Int?, Error?) -> Void) {
         let path = "/ws/v1/district/school/count"
         fetchData(path: path, model: ResourceCount.self, method: "GET") {resourceCount, error in
             let count = resourceCount?.count
@@ -57,5 +56,3 @@ extension SwiftyPowerSchool {
         }
     }
 }
-
-

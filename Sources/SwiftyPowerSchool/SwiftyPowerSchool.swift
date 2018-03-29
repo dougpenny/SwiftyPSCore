@@ -21,7 +21,6 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
-
 import Foundation
 
 public class SwiftyPowerSchool {
@@ -30,14 +29,17 @@ public class SwiftyPowerSchool {
     let clientSecret: String
     var token: Token?
     var metadata: Metadata?
-    
+
     public init(_ baseURL: String, clientID: String, clientSecret: String) {
         self.baseURL = URL(string: baseURL)
         self.clientID = clientID
         self.clientSecret = clientSecret
     }
-    
-    func fetchData<Model:Codable>(path: String, model: Model.Type, method: String, completion: @escaping (Model?, Error?) -> ()) {
+
+    func fetchData<Model: Codable>(path: String,
+                                   model: Model.Type,
+                                   method: String,
+                                   completion: @escaping (Model?, Error?) -> Void) {
         clientURLRequest(path: path, completion: { request, error in
             if let request = request {
                 self.dataTask(request: request, method: method) { data, error in
@@ -46,23 +48,20 @@ public class SwiftyPowerSchool {
                         do {
                             let object = try decoder.decode(model.self, from: data)
                             completion(object, nil)
-                        }
-                        catch let parseError {
+                        } catch let parseError {
                             completion(nil, parseError)
                         }
-                    }
-                    else {
+                    } else {
                         completion(nil, error)
                     }
                 }
-            }
-            else {
+            } else {
                 completion(nil, error)
             }
         })
     }
-    
-    private func requestAuthToken(completion: @escaping (Bool, Error?) -> ()) {
+
+    private func requestAuthToken(completion: @escaping (Bool, Error?) -> Void) {
         let concatCreds = self.clientID + ":" + self.clientSecret
         guard let utf8Creds = concatCreds.data(using: .utf8) else {
             completion(false, nil)
@@ -81,18 +80,18 @@ public class SwiftyPowerSchool {
                     let authToken = try decoder.decode(Token.self, from: tokenData)
                     self.token = authToken
                     completion(true, nil)
-                }
-                catch let parseError {
+                } catch let parseError {
                     completion(false, parseError)
                 }
-            }
-            else {
+            } else {
                 completion(false, error)
             }
         }
     }
-    
-    internal func dataTask(request: URLRequest, method: String,  completion: @escaping (Data?, Error?) -> ()) {
+
+    internal func dataTask(request: URLRequest,
+                           method: String,
+                           completion: @escaping (Data?, Error?) -> Void) {
         var request = request
         request.httpMethod = method
         let task = URLSession.shared.dataTask(with: request) {data, response, error in
@@ -104,13 +103,15 @@ public class SwiftyPowerSchool {
         }
         task.resume()
     }
-    
-    internal func clientURLRequest(path: String, params: Dictionary<String, AnyObject>? = nil, completion: @escaping (URLRequest?, Error?) -> ()) {
+
+    internal func clientURLRequest(path: String,
+                                   params: [String: AnyObject]? = nil,
+                                   completion: @escaping (URLRequest?, Error?) -> Void) {
         let requestURL = URL(string: path, relativeTo: self.baseURL)!
         var request = URLRequest(url: requestURL)
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
+
         if let params = params {
             var paramString = ""
             for (key, value) in params {
@@ -122,27 +123,23 @@ public class SwiftyPowerSchool {
             }
             request.httpBody = paramString.data(using: .utf8)
         }
-        
+
         if let token = self.token {
             request.setValue(token.tokenType + " " + token.accessToken, forHTTPHeaderField: "Authorization")
             completion(request, nil)
-        }
-        else {
+        } else {
             self.requestAuthToken(completion: { success, error in
                 if success {
                     if let token = self.token {
                         request.setValue(token.tokenType + " " + token.accessToken, forHTTPHeaderField: "Authorization")
                         completion(request, nil)
-                    }
-                    else {
+                    } else {
                         completion(nil, error)
                     }
-                }
-                else {
+                } else {
                     completion(nil, error)
                 }
             })
         }
     }
 }
-

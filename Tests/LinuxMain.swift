@@ -2,5 +2,5 @@ import XCTest
 @testable import SwiftyPowerSchoolTests
 
 XCTMain([
-    testCase(SwiftyPowerSchoolTests.allTests),
+    testCase(SwiftyPowerSchoolTests.allTests)
 ])

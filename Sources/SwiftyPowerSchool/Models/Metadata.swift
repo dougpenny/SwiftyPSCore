@@ -42,7 +42,6 @@
 //        "term_max_page_size": 0
 //    }
 
-
 public struct Metadata: Codable {
     let courseMaxPageSize: Int?
     let machineUptime: String?
@@ -80,4 +79,3 @@ public struct Metadata: Codable {
         case termMaxPageSize = "term_max_page_size"
     }
 }
-

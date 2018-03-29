@@ -21,7 +21,6 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
-
 public struct Name: Codable {
     public let firstName: String?
     public let middleName: String?

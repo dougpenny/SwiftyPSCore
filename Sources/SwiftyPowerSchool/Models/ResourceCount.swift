@@ -21,7 +21,6 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
-
 public struct ResourceCount: Codable {
     private let resource: CountStruct?
     public var count: Int? {
@@ -31,5 +30,3 @@ public struct ResourceCount: Codable {
         let count: Int?
     }
 }
-
-

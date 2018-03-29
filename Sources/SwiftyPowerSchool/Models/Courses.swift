@@ -21,6 +21,7 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
+//    swiftlint:disable identifier_name
 
 public struct Courses: Codable {
     private let coursesWrapper: CourseContainer?
@@ -28,7 +29,7 @@ public struct Courses: Codable {
     public var data: [Course]? {
         return self.coursesWrapper?.courses
     }
-    
+
     enum CodingKeys: String, CodingKey {
         case coursesWrapper = "courses"
     }

@@ -29,7 +29,6 @@
 //        "expires_in": "string"
 //    }
 
-
 import Foundation
 
 public struct Token: Codable {
@@ -43,7 +42,7 @@ public struct Token: Codable {
         accessToken = try container.decode(String.self, forKey: .accessToken)
         tokenType = try container.decode(String.self, forKey: .tokenType)
 
-        let expiresString = try container.decode(String.self, forKey:. expiresIn)
+        let expiresString = try container.decode(String.self, forKey: .expiresIn)
         expiresIn = Double(expiresString)
         timestamp = Date()
     }
