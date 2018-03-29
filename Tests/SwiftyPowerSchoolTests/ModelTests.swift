@@ -1,5 +1,5 @@
 //
-//    SwiftyPowerSchoolTests.swift
+//    ModelTests.swift
 //
 //    Copyright (c) 2018 Cooper Edmunds & Doug Penny – North Raleigh Christian Academy
 //
@@ -26,7 +26,7 @@
 import XCTest
 @testable import SwiftyPowerSchool
 
-class SwiftyPowerSchoolTests: XCTestCase {
+class ModelTests: XCTestCase {
     static var allTests = [
         ("testSchoolModel", testSchoolModel),
         ("testCourseModel", testCourseModel),

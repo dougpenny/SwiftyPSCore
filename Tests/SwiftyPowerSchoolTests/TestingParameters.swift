@@ -21,7 +21,6 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
-
 public struct TestingParameters: Codable {
     let baseURL: String
     let clientID: String
