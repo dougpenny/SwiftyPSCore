@@ -124,7 +124,7 @@ public class SwiftyPowerSchool {
             request.httpBody = paramString.data(using: .utf8)
         }
 
-        if let token = self.token {
+        if let token = self.token, !token.isExpired {
             request.setValue(token.tokenType + " " + token.accessToken, forHTTPHeaderField: "Authorization")
             completion(request, nil)
         } else {
