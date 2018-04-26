@@ -48,6 +48,15 @@ extension SwiftyPowerSchool {
         }
     }
 
+    public func getSectionsForTeacher(_ teacherID: Int, completion: @escaping ([SectionInfo]?, Error?) -> Void) {
+        let path = "/ws/schema/query/com.nrcaknights.swiftypowerschool.section.get_by_teacher"
+        fetchData(path: path, model: TeacherSections.self,
+                  method: "POST", params: ["teacher_id": "\(teacherID)"]) {sectionsObj, error in
+            let sections = sectionsObj?.data
+            completion(sections, error)
+        }
+    }
+
     public func getSchoolsCount(completion: @escaping (Int?, Error?) -> Void) {
         let path = "/ws/v1/district/school/count"
         fetchData(path: path, model: ResourceCount.self, method: "GET") {resourceCount, error in

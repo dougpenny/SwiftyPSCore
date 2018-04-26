@@ -26,7 +26,8 @@ import XCTest
 
 class EndpointTests: XCTestCase {
     static var allTests = [
-        ("testGetSchoolsCount", testGetSchoolsCount)
+        ("testGetSchoolsCount", testGetSchoolsCount),
+        ("testGetTeacherSections", testGetTeacherSections)
         ]
 
     var client: SwiftyPowerSchool!
@@ -56,11 +57,14 @@ class EndpointTests: XCTestCase {
 
         client.getSchoolsCount { schoolsCount, error in
             if let schoolsCount = schoolsCount {
-                print(schoolsCount)
-                XCTAssertEqual(self.params.schoolsCount, schoolsCount)
-                getSchoolsCountExpectation.fulfill()
+                if let testCount = self.params.schoolsCount {
+                    XCTAssertEqual(testCount, schoolsCount)
+                    getSchoolsCountExpectation.fulfill()
+                } else {
+                    XCTFail(error?.localizedDescription ?? "A schools count test item was not defined.")
+                }
             } else {
-                XCTFail(error?.localizedDescription ?? "An error occured retreiving the schools count")
+                XCTFail(error?.localizedDescription ?? "An error occured retreiving the schools count.")
             }
         }
 
@@ -68,6 +72,36 @@ class EndpointTests: XCTestCase {
             if let error = error {
                 XCTFail(error.localizedDescription)
             }
+        }
+    }
+
+    func testGetTeacherSections() {
+        if let testTeacher = self.params.testTeacher {
+            let getTeacherSectionsExpectation = self.expectation(description: "get teacher sections")
+
+            client.getSectionsForTeacher(testTeacher.teacherID) { teacherSections, error in
+                if let teacherSections = teacherSections {
+                    if let testTeacherSections = testTeacher.teacherSections {
+                        XCTAssertEqual(testTeacherSections[0].courseNumber, teacherSections[0].courseNumber)
+                        XCTAssertEqual(testTeacherSections[0].courseName, teacherSections[0].courseName)
+                        XCTAssertEqual(testTeacherSections[0].expression, teacherSections[0].expression)
+                        XCTAssertEqual(testTeacherSections[0].room, teacherSections[0].room)
+                        getTeacherSectionsExpectation.fulfill()
+                    } else {
+                        XCTFail(error?.localizedDescription ?? "There were no test sections defined.")
+                    }
+                } else {
+                    XCTFail(error?.localizedDescription ?? "An error occured retreiving the teacher's sections.")
+                }
+            }
+
+            self.waitForExpectations(timeout: 1) { error in
+                if let error = error {
+                    XCTFail(error.localizedDescription)
+                }
+            }
+        } else {
+            XCTFail("No teacher ID found")
         }
     }
 }

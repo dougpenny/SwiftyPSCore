@@ -38,9 +38,10 @@ public class SwiftyPowerSchool {
 
     func fetchData<Model: Codable>(path: String,
                                    model: Model.Type,
-                                   method: String,
+                                   method: String = "GET",
+                                   params: [String: String]? = nil,
                                    completion: @escaping (Model?, Error?) -> Void) {
-        clientURLRequest(path: path, completion: { request, error in
+        clientURLRequest(path: path, method: method, params: params, completion: { request, error in
             if let request = request {
                 self.dataTask(request: request, method: method) { data, error in
                     if let data = data {
@@ -105,22 +106,31 @@ public class SwiftyPowerSchool {
     }
 
     internal func clientURLRequest(path: String,
-                                   params: [String: AnyObject]? = nil,
+                                   method: String,
+                                   params: [String: String]? = nil,
                                    completion: @escaping (URLRequest?, Error?) -> Void) {
         let requestURL = URL(string: path, relativeTo: self.baseURL)!
         var request = URLRequest(url: requestURL)
+        request.httpMethod = method
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         if let params = params {
-            var paramString = ""
+            var paramString = "{"
+            let numOfParams = params.count
+            var index = 0
             for (key, value) in params {
                 let escapedKey = key.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
                 let escapedValue = value.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
                 if let escapedKey = escapedKey, let escapedValue = escapedValue {
-                    paramString += "\(escapedKey)=\(escapedValue)&"
+                    paramString += "\"\(escapedKey)\":\"\(escapedValue)\""
+                }
+                index += 1
+                if index != numOfParams {
+                    paramString += ","
                 }
             }
+            paramString += "}"
             request.httpBody = paramString.data(using: .utf8)
         }
 

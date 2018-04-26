@@ -1,5 +1,5 @@
 //
-//    TestingParameters.swift
+//    TeacherSections.swift
 //
 //    Copyright (c) 2018 Cooper Edmunds & Doug Penny – North Raleigh Christian Academy
 //
@@ -21,31 +21,28 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
-public struct TestingParameters: Codable {
-    let baseURL: String
-    let clientID: String
-    let clientSecret: String
-    let schoolsCount: Int?
-    let schoolNames: [String]?
-    let testSchool: TestSchool?
+public struct TeacherSections: Codable {
+    let data: [SectionInfo]
 
-    public struct TestSchool: Codable {
-        let schoolNumber: Int
-        let courseCount: Int
+    enum CodingKeys: String, CodingKey {
+        case data = "record"
     }
+}
 
-    let testTeacher: TestTeacher?
+public struct SectionInfo: Codable {
+    let courseNumber: String
+    let courseName: String
+    let sectionID: String
+    let room: String
+    let numStudents: String
+    let expression: String
 
-    public struct TestTeacher: Codable {
-        let teacherID: Int
-        let teacherSections: [TestTeacherSections]?
-        let teacherSectionsCount: Int?
-    }
-
-    public struct TestTeacherSections: Codable {
-        let courseNumber: String
-        let courseName: String
-        let expression: String
-        let room: String
+    enum CodingKeys: String, CodingKey {
+        case courseNumber = "course_number"
+        case courseName = "course_name"
+        case sectionID = "id"
+        case room
+        case numStudents = "num_students"
+        case expression = "external_expression"
     }
 }

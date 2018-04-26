@@ -21,7 +21,7 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
-//    swiftlint:disable function_body_length
+//    swiftlint:disable function_body_length type_body_length
 
 import XCTest
 @testable import SwiftyPowerSchool
@@ -31,6 +31,7 @@ class ModelTests: XCTestCase {
         ("testSchoolModel", testSchoolModel),
         ("testCourseModel", testCourseModel),
         ("testSectionModel", testSectionModel),
+        ("testTeacherSectionsModel", testTeacherSectionsModel),
         ("testResourceCountModel", testResourceCountModel)
     ]
 
@@ -179,6 +180,51 @@ class ModelTests: XCTestCase {
                     XCTAssertEqual(sections[1].staffID, 3955)
                     XCTAssertEqual(sections[1].gradebookType, "PTG")
                 } else { XCTFail("Sections data array is nil") }
+            } catch let parseError {
+                XCTFail(parseError.localizedDescription)
+            }
+        }
+    }
+
+    func testTeacherSectionsModel() {
+        let jsonTeacherSectionsExample =
+        """
+{
+    "name": "SECTIONS",
+    "record": [
+        {
+            "_name": "SECTIONS",
+            "course_number": "SOC441",
+            "course_name": "Honors US Constitution",
+            "num_students": "25",
+            "id": "21329",
+            "external_expression": "1(M-F)",
+            "room": "J301"
+        },
+        {
+            "_name": "SECTIONS",
+            "course_number": "MISC112",
+            "course_name": "Study Hall",
+            "num_students": "2",
+            "id": "21962",
+            "external_expression": "2(M-F)",
+            "room": "J301"
+        }
+    ],
+    "@extensions": "s_sec_edfi_x,s_sec_crdc_x"
+}
+"""
+        if let data = jsonTeacherSectionsExample.data(using: .utf8) {
+            let decoder = JSONDecoder()
+            do {
+                let allSections = try decoder.decode(TeacherSections.self, from: data)
+                let sections = allSections.data
+                XCTAssertEqual(sections.count, 2)
+                XCTAssertEqual(sections[0].sectionID, "21329")
+                XCTAssertEqual(sections[0].expression, "1(M-F)")
+                XCTAssertEqual(sections[0].numStudents, "25")
+                XCTAssertEqual(sections[1].room, "J301")
+                XCTAssertEqual(sections[1].courseName, "Study Hall")
             } catch let parseError {
                 XCTFail(parseError.localizedDescription)
             }

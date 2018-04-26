@@ -1,11 +1,27 @@
 {
-    "baseURL": "",
+    "baseURL": "https://powerschool.myschool.com",
     "clientID": "",
     "clientSecret": "",
-    "schoolsCount": 7,
-    "schoolNames": [],
+    "schoolsCount": 3,
+    "schoolNames": [
+        "My School - Lower",
+        "My School - Middle",
+        "My School - Upper"
+    ],
     "testSchool": {
         "schoolNumber": 1,
         "courseCount": 123
+    },
+    "testTeacher": {
+        "teacherID": 123,
+        "teacherSections": [
+            {
+                "courseNumber": "CSC101",
+                "courseName": "Intro to Computer Science",
+                "expression": "1(M-F)",
+                "room": "B129"
+            }
+        ],
+        "teacherSectionsCount": 7
     }
 }
