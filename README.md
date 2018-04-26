@@ -15,6 +15,8 @@ _SwiftyPowerSchool is not endorsed, sponsored, or affilitated with PowerSchool i
   * [Swift Pacakge Manager](#swift-package-manager)
   * [CocoaPods](#cocoapods)
 * [Usage](#usage)
+  * [Examples](#schools)
+  * [PowerQueries](#powerqueries)
 * [Contributing](#contributing)
   * [Endpoint Testing](#endpoint-testing)
 * [License](#license)
@@ -22,7 +24,7 @@ _SwiftyPowerSchool is not endorsed, sponsored, or affilitated with PowerSchool i
 ---
 
 ## Installation
-Before using SwiftyPowerSchool in your application, you will first need to create and install a Plugin XML file for your PowerSchool server. Information about creating the plugin file can be found on [PowerSchool's Developer Support](https://support.powerschool.com/developer/#/page/plugin-xml) site. Once you have installed the plugin, you will be provided a client ID and client secret that you will use for authenticating with the PowerSchool server.
+Before using _SwiftyPowerSchool_ in your application, you will first need to create and install a Plugin XML file for your PowerSchool server. Information about creating the plugin file can be found on the[PowerSchool Developer Support](https://support.powerschool.com/developer/#/page/plugin-xml) site. We have created an example plugin ([SwiftyPowerSchool-Plugin](https://github.com/NRCA/SwiftyPowerSchool-Plugin)) that you can use as is, or modify as you see fit. Once you have installed the plugin, you will be provided a client ID and client secret that you will use for authenticating with the PowerSchool server.
 
 ### Swift Package Manager
 To include SwiftyPowerSchool in a [Swift Package Manager](https://swift.org/package-manager/) package, add it to the `dependencies` attribute defined in your `Package.swift` file. For example:
@@ -102,6 +104,8 @@ client.getSchoolsCount() { schoolsCount, error in
 }
 ```
 
+### PowerQueries
+PowerQueries are a feature that allows you create custom API endpoints. You define the data to be returned and write a SQL select statement to fetch the data. PowerQueries are created through the PowerSchool plugin interface. You can see an example of one in our sample PowerSchool plugin, [SwiftyPowerSchool-Plugin](https://github.com/NRCA/SwiftyPowerSchool-Plugin). You can learn more about PowerQueries on the [PowerSchool Developer Support](https://support.powerschool.com/developer/#/page/powerqueries) site.
 ---
 
 ## Contributing
