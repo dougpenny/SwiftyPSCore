@@ -106,7 +106,6 @@ client.getSchoolsCount() { schoolsCount, error in
 
 ### PowerQueries
 PowerQueries are a feature that allows you create custom API endpoints. You define the data to be returned and write a SQL select statement to fetch the data. PowerQueries are created through the PowerSchool plugin interface. You can see an example of one in our sample PowerSchool plugin, [SwiftyPowerSchool-Plugin](https://github.com/NRCA/SwiftyPowerSchool-Plugin). You can learn more about PowerQueries on the [PowerSchool Developer Support](https://support.powerschool.com/developer/#/page/powerqueries) site.
----
 
 ## Contributing
 If you have a feature or idea you would like to see added to SwiftyPowerSchool, please [create an issue](https://github.com/NRCA/SwiftyPowerSchool/issues/new) explaining your idea with as much detail as possible.
