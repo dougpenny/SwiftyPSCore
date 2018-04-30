@@ -268,13 +268,14 @@ class ModelTests: XCTestCase {
             let decoder = JSONDecoder()
             do {
                 let allSections = try decoder.decode(TeacherSections.self, from: data)
-                let sections = allSections.data
-                XCTAssertEqual(sections.count, 2)
-                XCTAssertEqual(sections[0].sectionID, "21329")
-                XCTAssertEqual(sections[0].expression, "1(M-F)")
-                XCTAssertEqual(sections[0].numStudents, "25")
-                XCTAssertEqual(sections[1].room, "J301")
-                XCTAssertEqual(sections[1].courseName, "Study Hall")
+                if let sections = allSections.data {
+                    XCTAssertEqual(sections.count, 2)
+                    XCTAssertEqual(sections[0].sectionID, 21329)
+                    XCTAssertEqual(sections[0].expression, "1(M-F)")
+                    XCTAssertEqual(sections[0].numStudents, 25)
+                    XCTAssertEqual(sections[1].room, "J301")
+                    XCTAssertEqual(sections[1].courseName, "Study Hall")
+                }
             } catch let parseError {
                 XCTFail(parseError.localizedDescription)
             }

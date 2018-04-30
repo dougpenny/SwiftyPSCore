@@ -21,8 +21,10 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
+//    swiftlint:disable identifier_name
+
 public struct TeacherSections: Codable {
-    let data: [SectionInfo]
+    let data: [SectionInfo]?
 
     enum CodingKeys: String, CodingKey {
         case data = "record"
@@ -30,19 +32,26 @@ public struct TeacherSections: Codable {
 }
 
 public struct SectionInfo: Codable {
-    let courseNumber: String
-    let courseName: String
-    let sectionID: String
-    let room: String
-    let numStudents: String
-    let expression: String
+    let courseNumber: String?
+    let courseName: String?
+    var sectionID: Int? {
+        return Int(id)
+    }
+    let room: String?
+    var numStudents: Int? {
+        return Int(numStudentsString)
+    }
+    let expression: String?
+
+    private let id: String
+    private let numStudentsString: String
 
     enum CodingKeys: String, CodingKey {
         case courseNumber = "course_number"
         case courseName = "course_name"
-        case sectionID = "id"
+        case id
         case room
-        case numStudents = "num_students"
+        case numStudentsString = "num_students"
         case expression = "external_expression"
     }
 }
