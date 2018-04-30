@@ -21,7 +21,7 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
-//    swiftlint:disable function_body_length type_body_length
+//    swiftlint:disable function_body_length type_body_length line_length
 
 import XCTest
 @testable import SwiftyPowerSchool
@@ -98,6 +98,56 @@ class ModelTests: XCTestCase {
                         XCTAssertEqual(email, "tj@gwhs.com")
                     } else { XCTFail("Principal 'email' field is nil") }
                 } else { XCTFail("Schools data array is nil") }
+            } catch let parseError {
+                XCTFail(parseError.localizedDescription)
+            }
+        }
+    }
+
+    func testClassRosterModel() {
+        let jsonClassRosterExample =
+        """
+{
+    "name": "STUDENTS",
+    "record": [
+        {
+            "grade_level": "1",
+            "_name": "STUDENTS",
+            "dcid": "5978",
+            "gender": "M",
+            "lastfirst": "Appleseed, Johnny",
+            "student_number": "78219",
+            "last_name": "Appleseed",
+            "_id": 5978,
+            "id": "16789",
+            "first_name": "Johnny"
+        },
+        {
+            "grade_level": "7",
+            "_name": "STUDENTS",
+            "dcid": "5849",
+            "gender": "F",
+            "lastfirst": "Appleseed, Sally",
+            "student_number": "61597",
+            "last_name": "Appleseed",
+            "_id": 5849,
+            "id": "13598",
+            "first_name": "Sally"
+        }
+    ],
+    "@extensions": "activities,studentcorefields,u_students_extension,s_stu_ncea_x,s_stu_crdc_x,c_studentlocator,s_stu_edfi_x"
+}
+"""
+        if let data = jsonClassRosterExample.data(using: .utf8) {
+            let decoder = JSONDecoder()
+            do {
+                let classRoster = try decoder.decode(ClassRoster.self, from: data)
+                if let students = classRoster.data {
+                    XCTAssertEqual(students[0].gradeLevel, 1)
+                    XCTAssertEqual(students[0].lastFirst, "Appleseed, Johnny")
+                    XCTAssertEqual(students[1].gender, "F")
+                    XCTAssertEqual(students[1].studentNumber, 61597)
+                } else { XCTFail("Class roster students array is nil") }
             } catch let parseError {
                 XCTFail(parseError.localizedDescription)
             }
