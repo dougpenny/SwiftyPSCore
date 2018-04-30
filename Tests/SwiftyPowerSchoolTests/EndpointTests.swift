@@ -26,8 +26,8 @@ import XCTest
 
 class EndpointTests: XCTestCase {
     static var allTests = [
-        ("testGetSchoolsCount", testGetSchoolsCount),
-        ("testGetTeacherSections", testGetTeacherSections)
+        ("testSchoolsCount", testSchoolsCount),
+        ("testTeacherSections", testTeacherSections)
         ]
 
     var client: SwiftyPowerSchool!
@@ -52,14 +52,14 @@ class EndpointTests: XCTestCase {
         }
     }
 
-    func testGetSchoolsCount() {
-        let getSchoolsCountExpectation = self.expectation(description: "get schools count")
+    func testSchoolsCount() {
+        let schoolsCountExpectation = self.expectation(description: "get schools count")
 
-        client.getSchoolsCount { schoolsCount, error in
+        client.schoolsCount { schoolsCount, error in
             if let schoolsCount = schoolsCount {
                 if let testCount = self.params.schoolsCount {
                     XCTAssertEqual(testCount, schoolsCount)
-                    getSchoolsCountExpectation.fulfill()
+                    schoolsCountExpectation.fulfill()
                 } else {
                     XCTFail(error?.localizedDescription ?? "A schools count test item was not defined.")
                 }
@@ -75,18 +75,18 @@ class EndpointTests: XCTestCase {
         }
     }
 
-    func testGetTeacherSections() {
+    func testTeacherSections() {
         if let testTeacher = self.params.testTeacher {
-            let getTeacherSectionsExpectation = self.expectation(description: "get teacher sections")
+            let teacherSectionsExpectation = self.expectation(description: "get teacher sections")
 
-            client.getSectionsForTeacher(testTeacher.teacherID) { teacherSections, error in
+            client.sectionsForTeacher(testTeacher.teacherID) { teacherSections, error in
                 if let teacherSections = teacherSections {
                     if let testTeacherSections = testTeacher.teacherSections {
                         XCTAssertEqual(testTeacherSections[0].courseNumber, teacherSections[0].courseNumber)
                         XCTAssertEqual(testTeacherSections[0].courseName, teacherSections[0].courseName)
                         XCTAssertEqual(testTeacherSections[0].expression, teacherSections[0].expression)
                         XCTAssertEqual(testTeacherSections[0].room, teacherSections[0].room)
-                        getTeacherSectionsExpectation.fulfill()
+                        teacherSectionsExpectation.fulfill()
                     } else {
                         XCTFail(error?.localizedDescription ?? "There were no test sections defined.")
                     }

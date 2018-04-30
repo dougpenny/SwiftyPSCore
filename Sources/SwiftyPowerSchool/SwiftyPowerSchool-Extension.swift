@@ -24,7 +24,7 @@
 import Foundation
 
 extension SwiftyPowerSchool {
-    public func getSchools(completion: @escaping ([School]?, Error?) -> Void) {
+    public func schools(completion: @escaping ([School]?, Error?) -> Void) {
         let path = "/ws/v1/district/school"
         fetchData(path: path, model: Schools.self, method: "GET") {schoolsObj, error in
             let schools = schoolsObj?.data
@@ -32,7 +32,7 @@ extension SwiftyPowerSchool {
         }
     }
 
-    public func getCoursesFromSchool(_ schoolID: Int, completion: @escaping ([Course]?, Error?) -> Void) {
+    public func coursesFromSchool(_ schoolID: Int, completion: @escaping ([Course]?, Error?) -> Void) {
         let path = "/ws/v1/school/\(schoolID)/course"
         fetchData(path: path, model: Courses.self, method: "GET") {coursesObj, error in
             let courses = coursesObj?.data
@@ -40,7 +40,7 @@ extension SwiftyPowerSchool {
         }
     }
 
-    public func getSectionsFromSchool(_ schoolID: Int, completion: @escaping ([Section]?, Error?) -> Void) {
+    public func sectionsFromSchool(_ schoolID: Int, completion: @escaping ([Section]?, Error?) -> Void) {
         let path = "/ws/v1/school/\(schoolID)/section"
         fetchData(path: path, model: Sections.self, method: "GET") {sectionsObj, error in
             let sections = sectionsObj?.data
@@ -48,7 +48,7 @@ extension SwiftyPowerSchool {
         }
     }
 
-    public func getSectionsForTeacher(_ teacherID: Int, completion: @escaping ([SectionInfo]?, Error?) -> Void) {
+    public func sectionsForTeacher(_ teacherID: Int, completion: @escaping ([SectionInfo]?, Error?) -> Void) {
         let path = "/ws/schema/query/com.nrcaknights.swiftypowerschool.section.get_by_teacher"
         fetchData(path: path, model: TeacherSections.self,
                   method: "POST", params: ["teacher_id": "\(teacherID)"]) {sectionsObj, error in
@@ -57,7 +57,7 @@ extension SwiftyPowerSchool {
         }
     }
 
-    public func getSchoolsCount(completion: @escaping (Int?, Error?) -> Void) {
+    public func schoolsCount(completion: @escaping (Int?, Error?) -> Void) {
         let path = "/ws/v1/district/school/count"
         fetchData(path: path, model: ResourceCount.self, method: "GET") {resourceCount, error in
             let count = resourceCount?.count
