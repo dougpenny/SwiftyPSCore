@@ -32,7 +32,7 @@ extension SwiftyPowerSchool {
         }
     }
 
-    public func coursesFromSchool(_ schoolID: Int, completion: @escaping ([Course]?, Error?) -> Void) {
+    public func coursesForSchool(_ schoolID: Int, completion: @escaping ([Course]?, Error?) -> Void) {
         let path = "/ws/v1/school/\(schoolID)/course"
         fetchData(path: path, model: Courses.self, method: "GET") {coursesObj, error in
             let courses = coursesObj?.data
@@ -58,7 +58,7 @@ extension SwiftyPowerSchool {
         }
     }
 
-    public func sectionsFromSchool(_ schoolID: Int, completion: @escaping ([Section]?, Error?) -> Void) {
+    public func sectionsForSchool(_ schoolID: Int, completion: @escaping ([Section]?, Error?) -> Void) {
         let path = "/ws/v1/school/\(schoolID)/section"
         fetchData(path: path, model: Sections.self, method: "GET") {sectionsObj, error in
             let sections = sectionsObj?.data
