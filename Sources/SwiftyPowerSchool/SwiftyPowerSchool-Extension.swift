@@ -40,6 +40,15 @@ extension SwiftyPowerSchool {
         }
     }
 
+    public func homeroomRosterForTeacher(_ teacherID: Int, completion: @escaping ([StudentItem]?, Error?) -> Void) {
+        let path = "/ws/schema/query/com.nrcaknights.swiftypowerschool.students.homeroom_roster_for_teacher"
+        fetchData(path: path, model: ClassRoster.self, method: "POST",
+                  params: ["teacher_id": "\(teacherID)"]) {rosterObj, error in
+                    let classRoster = rosterObj?.data
+                    completion(classRoster, error)
+        }
+    }
+
     public func sectionsFromSchool(_ schoolID: Int, completion: @escaping ([Section]?, Error?) -> Void) {
         let path = "/ws/v1/school/\(schoolID)/section"
         fetchData(path: path, model: Sections.self, method: "GET") {sectionsObj, error in
@@ -50,8 +59,8 @@ extension SwiftyPowerSchool {
 
     public func sectionsForTeacher(_ teacherID: Int, completion: @escaping ([SectionInfo]?, Error?) -> Void) {
         let path = "/ws/schema/query/com.nrcaknights.swiftypowerschool.section.get_by_teacher"
-        fetchData(path: path, model: TeacherSections.self,
-                  method: "POST", params: ["teacher_id": "\(teacherID)"]) {sectionsObj, error in
+        fetchData(path: path, model: TeacherSections.self, method: "POST",
+                  params: ["teacher_id": "\(teacherID)"]) {sectionsObj, error in
             let sections = sectionsObj?.data
             completion(sections, error)
         }

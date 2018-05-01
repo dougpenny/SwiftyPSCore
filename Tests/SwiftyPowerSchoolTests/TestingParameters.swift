@@ -38,14 +38,8 @@ public struct TestingParameters: Codable {
 
     public struct TestTeacher: Codable {
         let teacherID: Int
-        let teacherSections: [TestTeacherSections]?
+        let teacherSections: [SectionInfo]?
         let teacherSectionsCount: Int?
-    }
-
-    public struct TestTeacherSections: Codable {
-        let courseNumber: String
-        let courseName: String
-        let expression: String
-        let room: String
+        let homeroomRoster: [StudentItem]?
     }
 }

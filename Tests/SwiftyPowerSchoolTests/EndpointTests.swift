@@ -52,6 +52,36 @@ class EndpointTests: XCTestCase {
         }
     }
 
+    func testHomeroomRosterForTeacher() {
+        if let testTeacher = self.params.testTeacher {
+            let teacherHomeroomRosterExpectation = self.expectation(description: "get homeroom roster")
+
+            client.homeroomRosterForTeacher(testTeacher.teacherID) { homeroomRoster, error in
+                if let homeroomRoster = homeroomRoster {
+                    if let testHomeroomRoster = testTeacher.homeroomRoster {
+                        XCTAssertEqual(testHomeroomRoster[0].gradeLevel, homeroomRoster[0].gradeLevel)
+                        XCTAssertEqual(testHomeroomRoster[0].lastFirst, homeroomRoster[0].lastFirst)
+                        XCTAssertEqual(testHomeroomRoster[1].studentNumber, homeroomRoster[1].studentNumber)
+                        XCTAssertEqual(testHomeroomRoster[1].gender, homeroomRoster[1].gender)
+                        teacherHomeroomRosterExpectation.fulfill()
+                    } else {
+                        XCTFail(error?.localizedDescription ?? "There was no test homeroom roster defined.")
+                    }
+                } else {
+                    XCTFail(error?.localizedDescription ?? "An error occured retreiving the teacher's homeroom roster.")
+                }
+            }
+
+            self.waitForExpectations(timeout: 1) { error in
+                if let error = error {
+                    XCTFail(error.localizedDescription)
+                }
+            }
+        } else {
+            XCTFail("No teacher ID found")
+        }
+    }
+
     func testSchoolsCount() {
         let schoolsCountExpectation = self.expectation(description: "get schools count")
 
