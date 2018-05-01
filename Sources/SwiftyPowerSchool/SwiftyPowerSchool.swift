@@ -39,7 +39,7 @@ public class SwiftyPowerSchool {
     func fetchData<Model: Codable>(path: String,
                                    model: Model.Type,
                                    method: String = "GET",
-                                   params: [String: String]? = nil,
+                                   params: [String: Any]? = nil,
                                    completion: @escaping (Model?, Error?) -> Void) {
         clientURLRequest(path: path, method: method, params: params, completion: { request, error in
             if let request = request {
@@ -107,7 +107,7 @@ public class SwiftyPowerSchool {
 
     internal func clientURLRequest(path: String,
                                    method: String,
-                                   params: [String: String]? = nil,
+                                   params: [String: Any]? = nil,
                                    completion: @escaping (URLRequest?, Error?) -> Void) {
         let requestURL = URL(string: path, relativeTo: self.baseURL)!
         var request = URLRequest(url: requestURL)
@@ -120,11 +120,7 @@ public class SwiftyPowerSchool {
             let numOfParams = params.count
             var index = 0
             for (key, value) in params {
-                let escapedKey = key.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-                let escapedValue = value.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-                if let escapedKey = escapedKey, let escapedValue = escapedValue {
-                    paramString += "\"\(escapedKey)\":\"\(escapedValue)\""
-                }
+                paramString += "\"\(key)\":\(value)"
                 index += 1
                 if index != numOfParams {
                     paramString += ","

@@ -37,5 +37,20 @@
                 "first_name": "Johnny"
             }
         ]
+    },
+    "testSection": {
+        "sectionDCID": "12345",
+        "enrollments": [
+            {
+                "grade_level": "7",
+                "dcid": "5978",
+                "student_number": "78219",
+                "lastfirst": "Appleseed, Johnny",
+                "gender": "M",
+                "last_name": "Appleseed",
+                "id": "16789",
+                "first_name": "Johnny"
+            }
+        ]
     }
 }

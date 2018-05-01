@@ -42,4 +42,11 @@ public struct TestingParameters: Codable {
         let teacherSectionsCount: Int?
         let homeroomRoster: [StudentItem]?
     }
+
+    let testSection: TestSection?
+
+    public struct TestSection: Codable {
+        let sectionDCID: String
+        let enrollments: [StudentItem]?
+    }
 }

@@ -40,6 +40,15 @@ extension SwiftyPowerSchool {
         }
     }
 
+    public func enrollmentsForSections(_ sectionID: [String], completion: @escaping ([StudentItem]?, Error?) -> Void) {
+        let path = "/ws/schema/query/com.pearson.core.teachers.sectionEnrollments"
+        fetchData(path: path, model: ClassRoster.self, method: "POST",
+                  params: ["section_dcid": sectionID]) {rosterObj, error in
+                    let classRoster = rosterObj?.data
+                    completion(classRoster, error)
+        }
+    }
+
     public func homeroomRosterForTeacher(_ teacherID: Int, completion: @escaping ([StudentItem]?, Error?) -> Void) {
         let path = "/ws/schema/query/com.nrcaknights.swiftypowerschool.students.homeroom_roster_for_teacher"
         fetchData(path: path, model: ClassRoster.self, method: "POST",
