@@ -33,26 +33,26 @@ public struct ClassRoster: Codable {
 
 public struct StudentItem: Codable {
     var dcid: Int? {
-        return Int(dcidString)
+        return Int(dcidString ?? "")
     }
     let firstName: String?
     var gradeLevel: Int? {
-        return Int(gradeLevelString)
+        return Int(gradeLevelString ?? "")
     }
     let gender: String?
     var id: Int? {
-        return Int(idString)
+        return Int(idString ?? "")
     }
     let lastFirst: String?
     let lastName: String?
     var studentNumber: Int? {
-        return Int(studentNumberString)
+        return Int(studentNumberString ?? "")
     }
 
-    private let dcidString: String
-    private let gradeLevelString: String
-    private let idString: String
-    private let studentNumberString: String
+    private let dcidString: String?
+    private let gradeLevelString: String?
+    private let idString: String?
+    private let studentNumberString: String?
 
     enum CodingKeys: String, CodingKey {
         case dcidString = "dcid"

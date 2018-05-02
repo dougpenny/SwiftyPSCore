@@ -35,28 +35,28 @@ public struct SectionInfo: Codable {
     let courseName: String?
     let courseNumber: String?
     var dcid: Int? {
-        return Int(dcidString)
+        return Int(dcidString ?? "")
     }
     var id: Int? {
-        return Int(idString)
+        return Int(idString ?? "")
     }
     var numStudents: Int? {
-        return Int(numStudentsString)
+        return Int(numStudentsString ?? "")
     }
     let period: String?
     let room: String?
     var sectionNumber: Int? {
-        return Int(sectionNumberString)
+        return Int(sectionNumberString ?? "")
     }
     var teacherID: Int? {
-        return Int(teacherIDString)
+        return Int(teacherIDString ?? "")
     }
 
-    private let dcidString: String
-    private let idString: String
-    private let numStudentsString: String
-    private let sectionNumberString: String
-    private let teacherIDString: String
+    private let dcidString: String?
+    private let idString: String?
+    private let numStudentsString: String?
+    private let sectionNumberString: String?
+    private let teacherIDString: String?
 
     enum CodingKeys: String, CodingKey {
         case courseName = "course_name"

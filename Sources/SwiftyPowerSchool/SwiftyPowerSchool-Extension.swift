@@ -21,6 +21,8 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
+//    swiftlint:disable line_length
+
 import Foundation
 
 extension SwiftyPowerSchool {
@@ -75,7 +77,7 @@ extension SwiftyPowerSchool {
     }
 
     public func sectionsForTeacher(_ teacherID: Int, completion: @escaping ([SectionInfo]?, Error?) -> Void) {
-        let path = "/ws/schema/query/com.nrcaknights.swiftypowerschool.section.get_by_teacher"
+        let path = "/ws/schema/query/com.nrcaknights.swiftypowerschool.section.for_teacher"
         fetchData(path: path, model: PowerQuerySections.self, method: "POST",
                   params: ["teacher_id": "\(teacherID)"]) {sectionsObj, error in
             let sections = sectionsObj?.data

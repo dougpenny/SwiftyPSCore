@@ -61,10 +61,12 @@ class EndpointTests: XCTestCase {
             client.enrollmentsForSections([testSection.sectionDCID]) { enrollments, error in
                 if let enrollments = enrollments {
                     if let testEnrollments = testSection.enrollments {
+                        XCTAssertEqual(testEnrollments[0].dcid, enrollments[0].dcid)
                         XCTAssertEqual(testEnrollments[0].gradeLevel, enrollments[0].gradeLevel)
                         XCTAssertEqual(testEnrollments[0].lastFirst, enrollments[0].lastFirst)
                         XCTAssertEqual(testEnrollments[1].studentNumber, enrollments[1].studentNumber)
                         XCTAssertEqual(testEnrollments[1].gender, enrollments[1].gender)
+                        XCTAssertEqual(testEnrollments[1].id, enrollments[1].id)
                         enrollmentsForSectionsExpectation.fulfill()
                     } else {
                         XCTFail(error?.localizedDescription ?? "There were no test section enrollments defined.")
@@ -148,6 +150,11 @@ class EndpointTests: XCTestCase {
                         XCTAssertEqual(testTeacherSections[0].courseName, teacherSections[0].courseName)
                         XCTAssertEqual(testTeacherSections[0].period, teacherSections[0].period)
                         XCTAssertEqual(testTeacherSections[0].room, teacherSections[0].room)
+                        XCTAssertEqual(testTeacherSections[0].numStudents, teacherSections[0].numStudents)
+                        XCTAssertEqual(testTeacherSections[0].id, teacherSections[0].id)
+                        XCTAssertEqual(testTeacherSections[0].teacherID, teacherSections[0].teacherID)
+                        XCTAssertEqual(testTeacherSections[0].dcid, teacherSections[0].dcid)
+                        XCTAssertEqual(testTeacherSections[0].sectionNumber, teacherSections[0].sectionNumber)
                         teacherSectionsExpectation.fulfill()
                     } else {
                         XCTFail(error?.localizedDescription ?? "There were no test sections defined.")
