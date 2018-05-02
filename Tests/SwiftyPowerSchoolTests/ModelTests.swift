@@ -33,7 +33,7 @@ class ModelTests: XCTestCase {
         ("testResourceCountModel", testResourceCountModel),
         ("testSchoolModel", testSchoolModel),
         ("testSectionModel", testSectionModel),
-        ("testTeacherSectionsModel", testTeacherSectionsModel)
+        ("testPowerQuerySectionsModel", testPowerQuerySectionsModel)
     ]
 
     func testClassRosterModel() {
@@ -226,17 +226,6 @@ class ModelTests: XCTestCase {
                 "external_expression": "6(M-F)",
                 "staff_id": 3955,
                 "gradebooktype": "PTG"
-            },
-            {
-                "id": 15919,
-                "school_id": 3,
-                "course_id": 1391,
-                "term_id": 1989,
-                "section_number": 6,
-                "expression": "9(A-E)",
-                "external_expression": "7(M-F)",
-                "staff_id": 3955,
-                "gradebooktype": "PTG"
             }
         ]
     }
@@ -247,11 +236,15 @@ class ModelTests: XCTestCase {
             do {
                 let allSections = try decoder.decode(Sections.self, from: data)
                 if let sections = allSections.data {
-                    XCTAssertEqual(sections.count, 2)
-                    XCTAssertEqual(sections[0].id, 1500)
+                    XCTAssertEqual(sections[0].courseID, 1391)
+                    XCTAssertEqual(sections[0].dcid, 1500)
                     XCTAssertEqual(sections[0].expression, "8(A-E)")
-                    XCTAssertEqual(sections[1].staffID, 3955)
-                    XCTAssertEqual(sections[1].gradebookType, "PTG")
+                    XCTAssertEqual(sections[0].gradebookType, "PTG")
+                    XCTAssertEqual(sections[0].sectionNumber, 5)
+                    XCTAssertEqual(sections[0].period, "6(M-F)")
+                    XCTAssertEqual(sections[0].schoolID, 3)
+                    XCTAssertEqual(sections[0].staffID, 3955)
+                    XCTAssertEqual(sections[0].termID, 1989)
                 } else { XCTFail("Sections data array is nil") }
             } catch let parseError {
                 XCTFail(parseError.localizedDescription)
@@ -259,45 +252,42 @@ class ModelTests: XCTestCase {
         }
     }
 
-    func testTeacherSectionsModel() {
-        let jsonTeacherSectionsExample =
+    func testPowerQuerySectionsModel() {
+        let jsonPowerQuerySectionsExample =
         """
 {
     "name": "SECTIONS",
     "record": [
         {
+            "teacher": "123",
             "_name": "SECTIONS",
             "course_number": "SOC441",
             "course_name": "Honors US Constitution",
+            "dcid": "16167",
             "num_students": "25",
             "id": "21329",
             "external_expression": "1(M-F)",
-            "room": "J301"
-        },
-        {
-            "_name": "SECTIONS",
-            "course_number": "MISC112",
-            "course_name": "Study Hall",
-            "num_students": "2",
-            "id": "21962",
-            "external_expression": "2(M-F)",
-            "room": "J301"
+            "room": "J301",
+            "section_number": "10"
         }
     ],
     "@extensions": "s_sec_edfi_x,s_sec_crdc_x"
 }
 """
-        if let data = jsonTeacherSectionsExample.data(using: .utf8) {
+        if let data = jsonPowerQuerySectionsExample.data(using: .utf8) {
             let decoder = JSONDecoder()
             do {
-                let allSections = try decoder.decode(TeacherSections.self, from: data)
+                let allSections = try decoder.decode(PowerQuerySections.self, from: data)
                 if let sections = allSections.data {
-                    XCTAssertEqual(sections.count, 2)
-                    XCTAssertEqual(sections[0].sectionID, 21329)
-                    XCTAssertEqual(sections[0].expression, "1(M-F)")
+                    XCTAssertEqual(sections[0].courseName, "Honors US Constitution")
+                    XCTAssertEqual(sections[0].courseNumber, "SOC441")
+                    XCTAssertEqual(sections[0].dcid, 16167)
+                    XCTAssertEqual(sections[0].id, 21329)
                     XCTAssertEqual(sections[0].numStudents, 25)
-                    XCTAssertEqual(sections[1].room, "J301")
-                    XCTAssertEqual(sections[1].courseName, "Study Hall")
+                    XCTAssertEqual(sections[0].period, "1(M-F)")
+                    XCTAssertEqual(sections[0].room, "J301")
+                    XCTAssertEqual(sections[0].sectionNumber, 10)
+                    XCTAssertEqual(sections[0].teacherID, 123)
                 }
             } catch let parseError {
                 XCTFail(parseError.localizedDescription)

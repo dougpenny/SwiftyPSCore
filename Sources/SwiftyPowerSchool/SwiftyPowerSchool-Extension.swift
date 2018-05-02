@@ -58,7 +58,15 @@ extension SwiftyPowerSchool {
         }
     }
 
-    public func sectionsForSchool(_ schoolID: Int, completion: @escaping ([Section]?, Error?) -> Void) {
+    /**
+     Fetch all sections from the given school for the current school year.
+     
+     - parameters:
+       - schoolID: The school DCID (not the ID or school number)
+       - sections: An optional array of sections
+       - error: An optional error
+    */
+    public func sectionsForSchool(_ schoolID: Int, completion: @escaping (_ sections: [Section]?, _ error: Error?) -> Void) {
         let path = "/ws/v1/school/\(schoolID)/section"
         fetchData(path: path, model: Sections.self, method: "GET") {sectionsObj, error in
             let sections = sectionsObj?.data
@@ -68,7 +76,7 @@ extension SwiftyPowerSchool {
 
     public func sectionsForTeacher(_ teacherID: Int, completion: @escaping ([SectionInfo]?, Error?) -> Void) {
         let path = "/ws/schema/query/com.nrcaknights.swiftypowerschool.section.get_by_teacher"
-        fetchData(path: path, model: TeacherSections.self, method: "POST",
+        fetchData(path: path, model: PowerQuerySections.self, method: "POST",
                   params: ["teacher_id": "\(teacherID)"]) {sectionsObj, error in
             let sections = sectionsObj?.data
             completion(sections, error)

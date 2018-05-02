@@ -1,5 +1,5 @@
 //
-//    TeacherSections.swift
+//    PowerQuerySections.swift
 //
 //    Copyright (c) 2018 Cooper Edmunds & Doug Penny – North Raleigh Christian Academy
 //
@@ -23,7 +23,7 @@
 
 //    swiftlint:disable identifier_name
 
-public struct TeacherSections: Codable {
+public struct PowerQuerySections: Codable {
     let data: [SectionInfo]?
 
     enum CodingKeys: String, CodingKey {
@@ -32,26 +32,41 @@ public struct TeacherSections: Codable {
 }
 
 public struct SectionInfo: Codable {
-    let courseNumber: String?
     let courseName: String?
-    var sectionID: Int? {
-        return Int(id)
+    let courseNumber: String?
+    var dcid: Int? {
+        return Int(dcidString)
     }
-    let room: String?
+    var id: Int? {
+        return Int(idString)
+    }
     var numStudents: Int? {
         return Int(numStudentsString)
     }
-    let expression: String?
+    let period: String?
+    let room: String?
+    var sectionNumber: Int? {
+        return Int(sectionNumberString)
+    }
+    var teacherID: Int? {
+        return Int(teacherIDString)
+    }
 
-    private let id: String
+    private let dcidString: String
+    private let idString: String
     private let numStudentsString: String
+    private let sectionNumberString: String
+    private let teacherIDString: String
 
     enum CodingKeys: String, CodingKey {
-        case courseNumber = "course_number"
         case courseName = "course_name"
-        case id
-        case room
+        case courseNumber = "course_number"
+        case dcidString = "dcid"
+        case idString = "id"
         case numStudentsString = "num_students"
-        case expression = "external_expression"
+        case period = "external_expression"
+        case room
+        case sectionNumberString = "section_number"
+        case teacherIDString = "teacher"
     }
 }

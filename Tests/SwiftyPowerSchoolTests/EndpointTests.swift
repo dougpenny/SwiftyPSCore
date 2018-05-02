@@ -146,7 +146,7 @@ class EndpointTests: XCTestCase {
                     if let testTeacherSections = testTeacher.teacherSections {
                         XCTAssertEqual(testTeacherSections[0].courseNumber, teacherSections[0].courseNumber)
                         XCTAssertEqual(testTeacherSections[0].courseName, teacherSections[0].courseName)
-                        XCTAssertEqual(testTeacherSections[0].expression, teacherSections[0].expression)
+                        XCTAssertEqual(testTeacherSections[0].period, teacherSections[0].period)
                         XCTAssertEqual(testTeacherSections[0].room, teacherSections[0].room)
                         teacherSectionsExpectation.fulfill()
                     } else {

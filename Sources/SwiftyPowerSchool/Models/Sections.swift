@@ -21,8 +21,6 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
-//    swiftlint:disable identifier_name
-
 public struct Sections: Codable {
     private let sectionsWrapper: SectionContainer?
     public var data: [Section]? {
@@ -42,25 +40,25 @@ private struct SectionContainer: Codable {
 }
 
 public struct Section: Codable {
-    public let id: Int?
-    public let schoolID: Int?
     public let courseID: Int?
-    public let termID: Int?
-    public let number: Int?
+    public let dcid: Int?
     public let expression: String
-    public let period: String?
-    public let staffID: Int?
     public let gradebookType: String?
+    public let sectionNumber: Int?
+    public let period: String?
+    public let schoolID: Int?
+    public let staffID: Int?
+    public let termID: Int?
 
     enum CodingKeys: String, CodingKey {
-        case id
-        case schoolID = "school_id"
         case courseID = "course_id"
-        case termID = "term_id"
-        case number = "section_number"
+        case dcid = "id"
         case expression
-        case period = "external_expression"
-        case staffID = "staff_id"
         case gradebookType = "gradebooktype"
+        case sectionNumber = "section_number"
+        case period = "external_expression"
+        case schoolID = "school_id"
+        case staffID = "staff_id"
+        case termID = "term_id"
     }
 }
