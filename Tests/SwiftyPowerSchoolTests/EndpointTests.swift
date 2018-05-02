@@ -29,7 +29,7 @@ class EndpointTests: XCTestCase {
             ("testEnrollmentsForSections", testEnrollmentsForSections),
             ("testHomeroomRosterForTeacher", testHomeroomRosterForTeacher),
             ("testSchoolsCount", testSchoolsCount),
-            ("testTeacherSections", testTeacherSections)
+            ("testTeacherSections", testTeacherSections),
         ]
 
     var client: SwiftyPowerSchool!

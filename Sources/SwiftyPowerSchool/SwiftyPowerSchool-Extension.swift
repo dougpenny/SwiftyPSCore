@@ -26,11 +26,31 @@
 import Foundation
 
 extension SwiftyPowerSchool {
+    
     public func schools(completion: @escaping ([School]?, Error?) -> Void) {
-        let path = "/ws/v1/district/school"
-        fetchData(path: path, model: Schools.self, method: "GET") {schoolsObj, error in
-            let schools = schoolsObj?.data
-            completion(schools, error)
+        let basePath = "/ws/v1/district/school"
+        var schools: [School] = []
+        schoolsCount() { schoolsCount, error in
+            if let schoolsCount = schoolsCount {
+                let pageSize = 50
+                let numberOfPages = (schoolsCount + pageSize - 1)/pageSize
+                
+                let pretendModel = Schools.self
+                
+                for page in 1...numberOfPages {
+                    let path = basePath + "?pagesize=\(pageSize)&page=\(page)"
+                    self.fetchData(path: path, model: pretendModel, method: "GET") {schoolsObj, error in
+                        let data = schoolsObj?.data
+                        schools += data ?? []
+                        if schools.count == schoolsCount {
+                            completion(schools, nil)
+                        }
+                    }
+                }
+            }
+            else {
+                completion(nil, error)
+            }
         }
     }
 
@@ -69,10 +89,28 @@ extension SwiftyPowerSchool {
        - error: An optional error
     */
     public func sectionsForSchool(_ schoolID: Int, completion: @escaping (_ sections: [Section]?, _ error: Error?) -> Void) {
-        let path = "/ws/v1/school/\(schoolID)/section"
-        fetchData(path: path, model: Sections.self, method: "GET") {sectionsObj, error in
-            let sections = sectionsObj?.data
-            completion(sections, error)
+        let basePath = "/ws/v1/school/\(schoolID)/section"
+        var sections: [Section] = []
+        sectionsCountForSchool(schoolID) { sectionsCount, error in
+            if let sectionsCount = sectionsCount {
+                
+                let pageSize = 50
+                let numberOfPages = (sectionsCount + pageSize - 1)/pageSize
+                
+                for page in 1...numberOfPages {
+                    let path = basePath + "?pagesize=\(pageSize)&page=\(page)"
+                    self.fetchData(path: path, model: Sections.self, method: "GET") {sectionsObj, error in
+                        let data = sectionsObj?.data
+                        sections += data ?? []
+                        if sections.count == sectionsCount {
+                            completion(sections, nil)
+                        }
+                    }
+                }
+            }
+            else {
+                completion(nil, error)
+            }
         }
     }
 
@@ -85,9 +123,18 @@ extension SwiftyPowerSchool {
         }
     }
 
+    public func sectionsCountForSchool(_ schoolID: Int, completion: @escaping (Int?, Error?) -> Void) {
+        let path = "/ws/v1/school/\(schoolID)/section"
+        resourceCount(path: path, completion: completion)
+    }
+    
     public func schoolsCount(completion: @escaping (Int?, Error?) -> Void) {
-        let path = "/ws/v1/district/school/count"
-        fetchData(path: path, model: ResourceCount.self, method: "GET") {resourceCount, error in
+        let path = "/ws/v1/district/school"
+        resourceCount(path: path, completion: completion)
+    }
+    
+    public func resourceCount(path: String, completion: @escaping (Int?, Error?) -> Void) {
+        fetchData(path: path + "/count", model: ResourceCount.self, method: "GET") {resourceCount, error in
             let count = resourceCount?.count
             completion(count, error)
         }
