@@ -20,8 +20,11 @@
                 "course_name": "Intro to Computer Science",
                 "num_students": "24",
                 "id": "21848",
-                "expression": "1(M-F)",
-                "room": "B129"
+                "external_expression": "1(M-F)",
+                "room": "B129",
+                "teacher": "1234",
+                "dcid": "12345",
+                "section_number": "1"
             }
         ],
         "teacherSectionsCount": 7,
