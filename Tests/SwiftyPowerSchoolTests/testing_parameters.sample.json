@@ -55,5 +55,21 @@
                 "first_name": "Johnny"
             }
         ]
+    },
+    "testCourse": {
+        "courseNumber": "CSC101",
+        "courseSections": [
+            {
+                "course_number": "CSC101",
+                "course_name": "Intro to Computer Science",
+                "num_students": "24",
+                "room": "B129",
+                "teacher": "1234",
+                "dcid": "12345",
+                "id": "21848",
+                "external_expression": "1(M-F)",
+                "section_number": "1"
+            }
+        ]
     }
 }
