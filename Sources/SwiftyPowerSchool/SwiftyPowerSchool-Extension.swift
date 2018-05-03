@@ -26,17 +26,84 @@
 import Foundation
 
 extension SwiftyPowerSchool {
-    
-    public func schools(completion: @escaping ([School]?, Error?) -> Void) {
+    /**
+     Retrieve all courses from the given school for the current school year.
+
+     - parameters:
+       - schoolID: The school DCID (not the ID or school number)
+       - courses: An optional array of Courses
+       - error: An optional error
+     */
+    public func coursesForSchool(_ schoolID: Int, completion: @escaping (_ courses: [Course]?, _ error: Error?) -> Void) {
+        let path = "/ws/v1/school/\(schoolID)/course"
+        fetchData(path: path, model: Courses.self, method: "GET") {coursesObj, error in
+            let courses = coursesObj?.data
+            completion(courses, error)
+        }
+    }
+
+    /**
+     Retrieve the distinct student enrollments for the given sections.
+
+     - Important: PowerQuery Endpoint
+     - parameters:
+       - sectionID: An array of section DCIDs (not the ID or section number)
+       - studentItem: An optional array of PowerQueryStudents
+       - error: An optional error
+     */
+    public func enrollmentsForSections(_ sectionID: [String], completion: @escaping (_ studentItem: [StudentItem]?, _ error: Error?) -> Void) {
+        let path = "/ws/schema/query/com.pearson.core.teachers.sectionEnrollments"
+        fetchData(path: path, model: ClassRoster.self, method: "POST",
+                  params: ["section_dcid": sectionID]) {rosterObj, error in
+                    let classRoster = rosterObj?.data
+                    completion(classRoster, error)
+        }
+    }
+
+    /**
+     Retrieve the current homeroom roster for the given teacher.
+
+     - Important: PowerQuery Endpoint
+     - Note: Setting what is considered a homeroom can be changed in the
+     [SwiftyPowerSchool-Plugin](https://github.com/NRCA/SwiftyPowerSchool-Plugin).
+     By default, any course with the course number \"HR\" or a course number
+     starting with \"Att\" is considered a homeroom.
+     - parameters:
+       - teacherID: The teacher ID (not the DCID or teacher number)
+       - studentItem: An optional array of PowerQueryStudents
+       - error: An optional error
+     */
+    public func homeroomRosterForTeacher(_ teacherID: Int, completion: @escaping (_ studentItem: [StudentItem]?, _ error: Error?) -> Void) {
+        let path = "/ws/schema/query/com.nrcaknights.swiftypowerschool.students.homeroom_roster_for_teacher"
+        fetchData(path: path, model: ClassRoster.self, method: "POST",
+                  params: ["teacher_id": "\(teacherID)"]) {rosterObj, error in
+                    let classRoster = rosterObj?.data
+                    completion(classRoster, error)
+        }
+    }
+
+    public func resourceCount(path: String, completion: @escaping (Int?, Error?) -> Void) {
+        fetchData(path: path + "/count", model: ResourceCount.self, method: "GET") {resourceCount, error in
+            let count = resourceCount?.count
+            completion(count, error)
+        }
+    }
+
+    /**
+     Retrieve all schools that are in the current district. Schools are sorted by name.
+
+     - parameters:
+       - schools: An optional array of Schools
+       - error: An optional error
+     */
+    public func schools(completion: @escaping (_ schools: [School]?, _ error: Error?) -> Void) {
         let basePath = "/ws/v1/district/school"
         var schools: [School] = []
-        schoolsCount() { schoolsCount, error in
+        schoolsCount { schoolsCount, error in
             if let schoolsCount = schoolsCount {
                 let pageSize = 50
                 let numberOfPages = (schoolsCount + pageSize - 1)/pageSize
-                
                 let pretendModel = Schools.self
-                
                 for page in 1...numberOfPages {
                     let path = basePath + "?pagesize=\(pageSize)&page=\(page)"
                     self.fetchData(path: path, model: pretendModel, method: "GET") {schoolsObj, error in
@@ -47,41 +114,24 @@ extension SwiftyPowerSchool {
                         }
                     }
                 }
-            }
-            else {
+            } else {
                 completion(nil, error)
             }
         }
     }
 
-    public func coursesForSchool(_ schoolID: Int, completion: @escaping ([Course]?, Error?) -> Void) {
-        let path = "/ws/v1/school/\(schoolID)/course"
-        fetchData(path: path, model: Courses.self, method: "GET") {coursesObj, error in
-            let courses = coursesObj?.data
-            completion(courses, error)
-        }
+    public func schoolsCount(completion: @escaping (Int?, Error?) -> Void) {
+        let path = "/ws/v1/district/school"
+        resourceCount(path: path, completion: completion)
     }
 
-    public func enrollmentsForSections(_ sectionID: [String], completion: @escaping ([StudentItem]?, Error?) -> Void) {
-        let path = "/ws/schema/query/com.pearson.core.teachers.sectionEnrollments"
-        fetchData(path: path, model: ClassRoster.self, method: "POST",
-                  params: ["section_dcid": sectionID]) {rosterObj, error in
-                    let classRoster = rosterObj?.data
-                    completion(classRoster, error)
-        }
-    }
-
-    public func homeroomRosterForTeacher(_ teacherID: Int, completion: @escaping ([StudentItem]?, Error?) -> Void) {
-        let path = "/ws/schema/query/com.nrcaknights.swiftypowerschool.students.homeroom_roster_for_teacher"
-        fetchData(path: path, model: ClassRoster.self, method: "POST",
-                  params: ["teacher_id": "\(teacherID)"]) {rosterObj, error in
-                    let classRoster = rosterObj?.data
-                    completion(classRoster, error)
-        }
+    public func sectionsCountForSchool(_ schoolID: Int, completion: @escaping (Int?, Error?) -> Void) {
+        let path = "/ws/v1/school/\(schoolID)/section"
+        resourceCount(path: path, completion: completion)
     }
 
     /**
-     Fetch all sections from the given school for the current school year.
+     Retrieve all sections of the given course number for the current school year.
 
      - Important: PowerQuery Endpoint
      - parameters:
@@ -99,7 +149,7 @@ extension SwiftyPowerSchool {
     }
 
     /**
-     Fetch all sections from the given school for the current school year.
+     Retrieve all sections from the given school for the current school year.
      
      - parameters:
        - schoolID: The school DCID (not the ID or school number)
@@ -111,10 +161,8 @@ extension SwiftyPowerSchool {
         var sections: [Section] = []
         sectionsCountForSchool(schoolID) { sectionsCount, error in
             if let sectionsCount = sectionsCount {
-                
                 let pageSize = 50
                 let numberOfPages = (sectionsCount + pageSize - 1)/pageSize
-                
                 for page in 1...numberOfPages {
                     let path = basePath + "?pagesize=\(pageSize)&page=\(page)"
                     self.fetchData(path: path, model: Sections.self, method: "GET") {sectionsObj, error in
@@ -125,36 +173,27 @@ extension SwiftyPowerSchool {
                         }
                     }
                 }
-            }
-            else {
+            } else {
                 completion(nil, error)
             }
         }
     }
 
-    public func sectionsForTeacher(_ teacherID: Int, completion: @escaping ([SectionInfo]?, Error?) -> Void) {
+    /**
+     Retrieve sections assigned to a given teacher for the current school year.
+
+     - Important: PowerQuery Endpoint
+     - parameters:
+       - teacherID: The teacher ID (not the DCID or teacher number)
+       - sectionsInfo: An optional array of PowerQuerySections
+       - error: An optional error
+     */
+    public func sectionsForTeacher(_ teacherID: Int, completion: @escaping (_ sectionsInfo: [SectionInfo]?, _ error: Error?) -> Void) {
         let path = "/ws/schema/query/com.nrcaknights.swiftypowerschool.section.for_teacher"
         fetchData(path: path, model: PowerQuerySections.self, method: "POST",
                   params: ["teacher_id": "\(teacherID)"]) {sectionsObj, error in
             let sections = sectionsObj?.data
             completion(sections, error)
-        }
-    }
-
-    public func sectionsCountForSchool(_ schoolID: Int, completion: @escaping (Int?, Error?) -> Void) {
-        let path = "/ws/v1/school/\(schoolID)/section"
-        resourceCount(path: path, completion: completion)
-    }
-    
-    public func schoolsCount(completion: @escaping (Int?, Error?) -> Void) {
-        let path = "/ws/v1/district/school"
-        resourceCount(path: path, completion: completion)
-    }
-    
-    public func resourceCount(path: String, completion: @escaping (Int?, Error?) -> Void) {
-        fetchData(path: path + "/count", model: ResourceCount.self, method: "GET") {resourceCount, error in
-            let count = resourceCount?.count
-            completion(count, error)
         }
     }
 }
