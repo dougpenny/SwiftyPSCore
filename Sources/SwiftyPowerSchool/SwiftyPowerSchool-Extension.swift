@@ -62,10 +62,28 @@ extension SwiftyPowerSchool {
 
     /**
      Fetch all sections from the given school for the current school year.
+
+     - Important: PowerQuery Endpoint
+     - parameters:
+       - courseNumber: The course number you would like to get current sections for (i.e. CSC101)
+       - sectionsInfo: An optional array of PowerQuerySections
+       - error: An optional error
+     */
+    public func sectionsForCourseNumber(_ courseNumber: String, completion: @escaping (_ sectionsInfo: [SectionInfo]?, _ error: Error?) -> Void) {
+        let path = "/ws/schema/query/com.nrcaknights.swiftypowerschool.section.for_course_number"
+        fetchData(path: path, model: PowerQuerySections.self, method: "POST",
+                  params: ["course_number": "\(courseNumber)"]) {sectionsObj, error in
+                    let sections = sectionsObj?.data
+                    completion(sections, error)
+        }
+    }
+
+    /**
+     Fetch all sections from the given school for the current school year.
      
      - parameters:
        - schoolID: The school DCID (not the ID or school number)
-       - sections: An optional array of sections
+       - sections: An optional array of Sections
        - error: An optional error
     */
     public func sectionsForSchool(_ schoolID: Int, completion: @escaping (_ sections: [Section]?, _ error: Error?) -> Void) {

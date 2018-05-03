@@ -120,7 +120,11 @@ public class SwiftyPowerSchool {
             let numOfParams = params.count
             var index = 0
             for (key, value) in params {
-                paramString += "\"\(key)\":\(value)"
+                if value is [Any] {
+                    paramString += "\"\(key)\":\(value)"
+                } else {
+                    paramString += "\"\(key)\":\"\(value)\""
+                }
                 index += 1
                 if index != numOfParams {
                     paramString += ","

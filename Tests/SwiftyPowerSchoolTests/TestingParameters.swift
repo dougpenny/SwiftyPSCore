@@ -49,4 +49,11 @@ public struct TestingParameters: Codable {
         let sectionDCID: String
         let enrollments: [StudentItem]?
     }
+
+    let testCourse: TestCourse?
+
+    public struct TestCourse: Codable {
+        let courseNumber: String
+        let courseSections: [SectionInfo]?
+    }
 }
