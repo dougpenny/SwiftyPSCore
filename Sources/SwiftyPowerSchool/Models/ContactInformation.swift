@@ -60,7 +60,7 @@ public struct Phones: Codable {
 
     enum CodingKeys: String, CodingKey {
         case faxNumber = "fax"
-        case homePhone = "home_phone" 
+        case homePhone = "home_phone"
         case mainNumber = "main"
     }
 }
