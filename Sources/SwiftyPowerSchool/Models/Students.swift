@@ -1,5 +1,5 @@
 //
-//    Student.swift
+//    Students.swift
 //
 //    Copyright (c) 2018 Doug Penny – North Raleigh Christian Academy
 //
@@ -20,6 +20,14 @@
 //    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
+
+public struct Students: Codable {
+    let data: [Student]?
+
+    enum CodingKeys: String, CodingKey {
+        case data = "student"
+    }
+}
 
 public struct Student: Codable {
     let addresses: Addresses?
