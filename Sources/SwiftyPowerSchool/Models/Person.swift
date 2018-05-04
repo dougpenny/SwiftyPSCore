@@ -32,3 +32,17 @@ public struct Name: Codable {
         case lastName = "last_name"
     }
 }
+
+public struct Demographics: Codable {
+    let birthDate: String?
+    let districtEntryDate: String?
+    let gender: String?
+    let projGradYear: Int?
+
+    enum CodingKeys: String, CodingKey {
+        case birthDate = "birth_date"
+        case districtEntryDate = "district_entry_date"
+        case gender
+        case projGradYear = "projected_graduation_year"
+    }
+}

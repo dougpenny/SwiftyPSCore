@@ -1,5 +1,5 @@
 //
-//    ContactInformation.swift
+//    Student.swift
 //
 //    Copyright (c) 2018 Doug Penny – North Raleigh Christian Academy
 //
@@ -21,50 +21,22 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
-public struct Addresses: Codable {
-    public let home: Address?
-    public let mailing: Address?
-    public let physical: Address?
-
-}
-
-public struct Address: Codable {
-    public let city: String?
-    public let postalCode: Int?
-    public let state: String?
-    public let street: String?
+public struct Student: Codable {
+    let addresses: Addresses?
+    let dcid: Int?
+    let demographics: Demographics?
+    let name: Name?
+    let phones: Phones?
+    let studentNumber: Int?
+    let studentUsername: String?
 
     enum CodingKeys: String, CodingKey {
-        case city
-        case postalCode = "postal_code"
-        case state = "state_province"
-        case street
+        case addresses
+        case dcid = "id"
+        case demographics
+        case name
+        case phones
+        case studentNumber = "local_id"
+        case studentUsername = "student_username"
     }
-
-}
-
-public struct Phones: Codable {
-    private let faxNumber: PhoneNumber?
-    private let homePhone: PhoneNumber?
-    private let mainNumber: PhoneNumber?
-
-    var fax: String? {
-        return faxNumber?.number
-    }
-    var home: String? {
-        return homePhone?.number
-    }
-    var main: String? {
-        return mainNumber?.number
-    }
-
-    enum CodingKeys: String, CodingKey {
-        case faxNumber = "fax"
-        case homePhone = "home_phone" 
-        case mainNumber = "main"
-    }
-}
-
-public struct PhoneNumber: Codable {
-    public let number: String?
 }
