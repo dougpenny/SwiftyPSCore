@@ -30,6 +30,7 @@ class EndpointTests: XCTestCase {
             ("testHomeroomRosterForTeacher", testHomeroomRosterForTeacher),
             ("testSchoolsCount", testSchoolsCount),
             ("testSectionsForCourseNumber", testSectionsForCourseNumber),
+            ("testSectionsForSchool", testSectionsForSchool),
             ("testTeacherSections", testTeacherSections)
         ]
 
@@ -172,6 +173,30 @@ class EndpointTests: XCTestCase {
             }
         } else {
             XCTFail("No test course found.")
+        }
+    }
+    
+    func testSectionsForSchool() {
+        let schoolSectionsExpectation = self.expectation(description: "get sections for school")
+        
+        client.sectionsForSchool(1) { sections, error in
+            if let sections = sections {
+                self.client.sectionsCountForSchool(1) { sectionsCount, error in
+                    if let sectionsCount = sectionsCount {
+                        XCTAssertEqual(sections.count, sectionsCount)
+                        schoolSectionsExpectation.fulfill()
+                    }
+                }
+            }
+            else {
+                XCTFail()
+            }
+        }
+        
+        self.waitForExpectations(timeout: 5) { error in
+            if let error = error {
+                XCTFail(error.localizedDescription)
+            }
         }
     }
 

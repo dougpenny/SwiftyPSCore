@@ -23,11 +23,13 @@
 
 //    swiftlint:disable identifier_name
 
-public struct Courses: Codable {
+public struct Courses: Pagable {
+    
     private let coursesWrapper: CourseContainer?
 
     public var data: [Course]? {
-        return self.coursesWrapper?.courses
+        get { return self.coursesWrapper?.courses }
+        set { data = newValue }
     }
 
     enum CodingKeys: String, CodingKey {

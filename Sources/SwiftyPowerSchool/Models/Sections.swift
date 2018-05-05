@@ -21,18 +21,20 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
-public struct Sections: Codable {
-    private let sectionsWrapper: SectionContainer?
-    public var data: [Section]? {
-        return sectionsWrapper?.sections
+public struct Sections: Pagable {
+    private var sectionsWrapper: SectionContainer?
+    var data: [Section]? {
+        get { return sectionsWrapper?.sections }
+        set { sectionsWrapper?.sections = newValue }
     }
+    
     enum CodingKeys: String, CodingKey {
         case sectionsWrapper = "sections"
     }
 }
 
 private struct SectionContainer: Codable {
-    public let sections: [Section]?
+    public var sections: [Section]?
 
     enum CodingKeys: String, CodingKey {
         case sections = "section"

@@ -36,9 +36,8 @@ extension SwiftyPowerSchool {
      */
     public func coursesForSchool(_ schoolID: Int, completion: @escaping (_ courses: [Course]?, _ error: Error?) -> Void) {
         let path = "/ws/v1/school/\(schoolID)/course"
-        fetchData(path: path, model: Courses.self, method: "GET") {coursesObj, error in
-            let courses = coursesObj?.data
-            completion(courses, error)
+        fetchData(path: path, model: Courses.self) { coursesObj, error in
+            completion(coursesObj?.data, error)
         }
     }
 
@@ -98,25 +97,8 @@ extension SwiftyPowerSchool {
      */
     public func schools(completion: @escaping (_ schools: [School]?, _ error: Error?) -> Void) {
         let basePath = "/ws/v1/district/school"
-        var schools: [School] = []
-        schoolsCount { schoolsCount, error in
-            if let schoolsCount = schoolsCount {
-                let pageSize = 50
-                let numberOfPages = (schoolsCount + pageSize - 1)/pageSize
-                let pretendModel = Schools.self
-                for page in 1...numberOfPages {
-                    let path = basePath + "?pagesize=\(pageSize)&page=\(page)"
-                    self.fetchData(path: path, model: pretendModel, method: "GET") {schoolsObj, error in
-                        let data = schoolsObj?.data
-                        schools += data ?? []
-                        if schools.count == schoolsCount {
-                            completion(schools, nil)
-                        }
-                    }
-                }
-            } else {
-                completion(nil, error)
-            }
+        self.fetchData(path: basePath, model: Schools.self) { schoolsObj, error in
+            completion(schoolsObj?.data, error)
         }
     }
 
@@ -158,27 +140,11 @@ extension SwiftyPowerSchool {
     */
     public func sectionsForSchool(_ schoolID: Int, completion: @escaping (_ sections: [Section]?, _ error: Error?) -> Void) {
         let basePath = "/ws/v1/school/\(schoolID)/section"
-        var sections: [Section] = []
-        sectionsCountForSchool(schoolID) { sectionsCount, error in
-            if let sectionsCount = sectionsCount {
-                let pageSize = 50
-                let numberOfPages = (sectionsCount + pageSize - 1)/pageSize
-                for page in 1...numberOfPages {
-                    let path = basePath + "?pagesize=\(pageSize)&page=\(page)"
-                    self.fetchData(path: path, model: Sections.self, method: "GET") {sectionsObj, error in
-                        let data = sectionsObj?.data
-                        sections += data ?? []
-                        if sections.count == sectionsCount {
-                            completion(sections, nil)
-                        }
-                    }
-                }
-            } else {
-                completion(nil, error)
-            }
+        self.fetchData(path: basePath, model: Sections.self) { sectionsObj, error in
+            completion(sectionsObj?.data, error)
         }
     }
-
+    
     /**
      Retrieve sections assigned to a given teacher for the current school year.
 
