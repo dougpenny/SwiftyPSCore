@@ -22,28 +22,45 @@
 //    SOFTWARE.
 
 public struct Addresses: Codable {
+    public let home: Address?
+    public let mailing: Address?
     public let physical: Address?
+
 }
 
 public struct Address: Codable {
-    public let street: String?
     public let city: String?
-    public let state: String?
     public let postalCode: Int?
+    public let state: String?
+    public let street: String?
 
     enum CodingKeys: String, CodingKey {
         case city
-        case street
-        case state = "state_province"
         case postalCode = "postal_code"
+        case state = "state_province"
+        case street
     }
 
 }
 
 public struct Phones: Codable {
-    public let mainNumber: PhoneNumber?
+    private let faxNumber: PhoneNumber?
+    private let homePhone: PhoneNumber?
+    private let mainNumber: PhoneNumber?
+
+    var fax: String? {
+        return faxNumber?.number
+    }
+    var home: String? {
+        return homePhone?.number
+    }
+    var main: String? {
+        return mainNumber?.number
+    }
 
     enum CodingKeys: String, CodingKey {
+        case faxNumber = "fax"
+        case homePhone = "home_phone"
         case mainNumber = "main"
     }
 }

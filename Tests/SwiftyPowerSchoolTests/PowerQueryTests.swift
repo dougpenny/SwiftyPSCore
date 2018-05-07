@@ -1,7 +1,7 @@
 //
-//    EndpointTests.swift
+//    PowerQueryTests.swift
 //
-//    Copyright (c) 2018 Cooper Edmunds & Doug Penny – North Raleigh Christian Academy
+//    Copyright (c) 2018 Doug Penny – North Raleigh Christian Academy
 //
 //    Permission is hereby granted, free of charge, to any person obtaining a copy
 //    of this software and associated documentation files (the "Software"), to deal
@@ -24,23 +24,20 @@
 import XCTest
 @testable import SwiftyPowerSchool
 
-class EndpointTests: XCTestCase {
+class PowerQueryTests: XCTestCase {
     static var allTests = [
-            ("testEnrollmentsForSections", testEnrollmentsForSections),
-            ("testHomeroomRosterForTeacher", testHomeroomRosterForTeacher),
-            ("testSchoolsCount", testSchoolsCount),
-            ("testSectionsForCourseNumber", testSectionsForCourseNumber),
-            ("testSectionsForSchool", testSectionsForSchool),
-            ("testTeacherSections", testTeacherSections),
-            ("testSchoolsCount", testSchoolsCount)
-        ]
+        ("testEnrollmentsForSections", testEnrollmentsForSections),
+        ("testHomeroomRosterForTeacher", testHomeroomRosterForTeacher),
+        ("testSectionsForCourseNumber", testSectionsForCourseNumber),
+        ("testTeacherSections", testTeacherSections)
+    ]
 
     var client: SwiftyPowerSchool!
     var params: TestingParameters!
 
     override func setUp() {
         super.setUp()
-        print("EndpointTests setup called--")
+        print("PowerQueryTests setup called--")
         if let paramFilePath = Bundle(for: type(of: self)).path(forResource: "testing_parameters", ofType: "json") {
             let decoder = JSONDecoder()
             do {
@@ -56,11 +53,11 @@ class EndpointTests: XCTestCase {
             print("File not found!")
         }
     }
-    
+
     func testEnrollmentsForSections() {
         if let testSection = self.params.testSection {
             let enrollmentsForSectionsExpectation = self.expectation(description: "get section enrollments")
-            
+
             client.enrollmentsForSections([testSection.sectionDCID]) { enrollments, error in
                 if let enrollments = enrollments {
                     if let testEnrollments = testSection.enrollments {
@@ -78,7 +75,7 @@ class EndpointTests: XCTestCase {
                     XCTFail(error?.localizedDescription ?? "An error occured retreiving the section enrollments.")
                 }
             }
-            
+
             self.waitForExpectations(timeout: 1) { error in
                 if let error = error {
                     XCTFail(error.localizedDescription)
@@ -88,11 +85,11 @@ class EndpointTests: XCTestCase {
             XCTFail("No test section found.")
         }
     }
-    
+
     func testHomeroomRosterForTeacher() {
         if let testTeacher = self.params.testTeacher {
             let teacherHomeroomRosterExpectation = self.expectation(description: "get homeroom roster")
-            
+
             client.homeroomRosterForTeacher(testTeacher.teacherID) { homeroomRoster, error in
                 if let homeroomRoster = homeroomRoster {
                     if let testHomeroomRoster = testTeacher.homeroomRoster {
@@ -108,7 +105,7 @@ class EndpointTests: XCTestCase {
                     XCTFail(error?.localizedDescription ?? "An error occured retreiving the teacher's homeroom roster.")
                 }
             }
-            
+
             self.waitForExpectations(timeout: 1) { error in
                 if let error = error {
                     XCTFail(error.localizedDescription)
@@ -116,29 +113,6 @@ class EndpointTests: XCTestCase {
             }
         } else {
             XCTFail("No test teacher found.")
-        }
-    }
-
-    func testSchoolsCount() {
-        let schoolsCountExpectation = self.expectation(description: "get schools count")
-
-        client.schoolsCount { schoolsCount, error in
-            if let schoolsCount = schoolsCount {
-                if let testCount = self.params.schoolsCount {
-                    XCTAssertEqual(testCount, schoolsCount)
-                    schoolsCountExpectation.fulfill()
-                } else {
-                    XCTFail(error?.localizedDescription ?? "A schools count test item was not defined.")
-                }
-            } else {
-                XCTFail(error?.localizedDescription ?? "An error occured retreiving the schools count.")
-            }
-        }
-
-        self.waitForExpectations(timeout: 1) { error in
-            if let error = error {
-                XCTFail(error.localizedDescription)
-            }
         }
     }
 
@@ -174,30 +148,6 @@ class EndpointTests: XCTestCase {
             }
         } else {
             XCTFail("No test course found.")
-        }
-    }
-    
-    func testSectionsForSchool() {
-        let schoolSectionsExpectation = self.expectation(description: "get sections for school")
-        
-        client.sectionsForSchool(1) { sections, error in
-            if let sections = sections {
-                self.client.sectionsCountForSchool(1) { sectionsCount, error in
-                    if let sectionsCount = sectionsCount {
-                        XCTAssertEqual(sections.count, sectionsCount)
-                        schoolSectionsExpectation.fulfill()
-                    }
-                }
-            }
-            else {
-                XCTFail()
-            }
-        }
-        
-        self.waitForExpectations(timeout: 5) { error in
-            if let error = error {
-                XCTFail(error.localizedDescription)
-            }
         }
     }
 

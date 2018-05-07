@@ -1,5 +1,5 @@
 //
-//    Person.swift
+//    Students.swift
 //
 //    Copyright (c) 2018 Doug Penny – North Raleigh Christian Academy
 //
@@ -21,28 +21,30 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
-public struct Name: Codable {
-    public let firstName: String?
-    public let middleName: String?
-    public let lastName: String?
+public struct Students: Codable {
+    let data: [Student]?
 
     enum CodingKeys: String, CodingKey {
-        case firstName = "first_name"
-        case middleName = "middle_name"
-        case lastName = "last_name"
+        case data = "student"
     }
 }
 
-public struct Demographics: Codable {
-    let birthDate: String?
-    let districtEntryDate: String?
-    let gender: String?
-    let projGradYear: Int?
+public struct Student: Codable {
+    let addresses: Addresses?
+    let dcid: Int?
+    let demographics: Demographics?
+    let name: Name?
+    let phones: Phones?
+    let studentNumber: Int?
+    let studentUsername: String?
 
     enum CodingKeys: String, CodingKey {
-        case birthDate = "birth_date"
-        case districtEntryDate = "district_entry_date"
-        case gender
-        case projGradYear = "projected_graduation_year"
+        case addresses
+        case dcid = "id"
+        case demographics
+        case name
+        case phones
+        case studentNumber = "local_id"
+        case studentUsername = "student_username"
     }
 }
