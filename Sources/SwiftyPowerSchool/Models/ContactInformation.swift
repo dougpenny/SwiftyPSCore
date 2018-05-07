@@ -22,17 +22,17 @@
 //    SOFTWARE.
 
 public struct Addresses: Codable {
-    public let home: Address?
-    public let mailing: Address?
-    public let physical: Address?
+    let home: Address?
+    let mailing: Address?
+    let physical: Address?
 
 }
 
 public struct Address: Codable {
-    public let city: String?
-    public let postalCode: Int?
-    public let state: String?
-    public let street: String?
+    let city: String?
+    let postalCode: Int?
+    let state: String?
+    let street: String?
 
     enum CodingKeys: String, CodingKey {
         case city
@@ -66,5 +66,5 @@ public struct Phones: Codable {
 }
 
 public struct PhoneNumber: Codable {
-    public let number: String?
+    let number: String?
 }

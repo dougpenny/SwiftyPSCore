@@ -22,10 +22,21 @@
 //    SOFTWARE.
 
 public struct Students: Codable {
-    let data: [Student]?
+    private let studentsWrapper: StudentContainer?
+    var data: [Student]? {
+        return studentsWrapper?.students
+    }
 
     enum CodingKeys: String, CodingKey {
-        case data = "student"
+        case studentsWrapper = "students"
+    }
+}
+
+private struct StudentContainer: Codable {
+    let students: [Student]?
+
+    enum CodingKeys: String, CodingKey {
+        case students = "student"
     }
 }
 
@@ -46,5 +57,18 @@ public struct Student: Codable {
         case phones
         case studentNumber = "local_id"
         case studentUsername = "student_username"
+    }
+}
+
+extension StudentContainer {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        do {
+            let studentsArray = try container.decode(Array<Student>.self, forKey: .students)
+            self.init(students: studentsArray)
+        } catch DecodingError.typeMismatch(_, _) {
+            let student = try container.decode(Student.self, forKey: .students)
+            self.init(students: [student])
+        }
     }
 }

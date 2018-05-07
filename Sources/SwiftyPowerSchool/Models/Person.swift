@@ -22,9 +22,9 @@
 //    SOFTWARE.
 
 public struct Name: Codable {
-    public let firstName: String?
-    public let middleName: String?
-    public let lastName: String?
+    let firstName: String?
+    let middleName: String?
+    let lastName: String?
 
     enum CodingKeys: String, CodingKey {
         case firstName = "first_name"

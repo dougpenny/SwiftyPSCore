@@ -26,7 +26,7 @@
 public struct Courses: Codable {
     private let coursesWrapper: CourseContainer?
 
-    public var data: [Course]? {
+    var data: [Course]? {
         return self.coursesWrapper?.courses
     }
 
@@ -44,13 +44,26 @@ private struct CourseContainer: Codable {
 }
 
 public struct Course: Codable {
-    public let id: Int?
-    public let number: String?
-    public let name: String?
+    let id: Int?
+    let number: String?
+    let name: String?
 
     enum CodingKeys: String, CodingKey {
         case id
         case number = "course_number"
         case name = "course_name"
+    }
+}
+
+extension CourseContainer {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        do {
+            let coursesArray = try container.decode(Array<Course>.self, forKey: .courses)
+            self.init(courses: coursesArray)
+        } catch DecodingError.typeMismatch( _, _) {
+            let course = try container.decode(Course.self, forKey: .courses)
+            self.init(courses: [course])
+        }
     }
 }
