@@ -23,9 +23,10 @@
 
 public struct ResourceCount: Codable {
     private let resource: CountStruct?
-    public var count: Int? {
+    var count: Int? {
         return resource?.count
     }
+
     private struct CountStruct: Codable {
         let count: Int?
     }

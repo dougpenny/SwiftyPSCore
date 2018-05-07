@@ -34,7 +34,7 @@ public struct Sections: Pagable {
 }
 
 private struct SectionContainer: Codable {
-    public var sections: [Section]?
+    var sections: [Section]?
 
     enum CodingKeys: String, CodingKey {
         case sections = "section"
@@ -42,15 +42,15 @@ private struct SectionContainer: Codable {
 }
 
 public struct Section: Codable {
-    public let courseID: Int?
-    public let dcid: Int?
-    public let expression: String
-    public let gradebookType: String?
-    public let sectionNumber: Int?
-    public let period: String?
-    public let schoolID: Int?
-    public let staffID: Int?
-    public let termID: Int?
+    let courseID: Int?
+    let dcid: Int?
+    let expression: String
+    let gradebookType: String?
+    let sectionNumber: Int?
+    let period: String?
+    let schoolID: Int?
+    let staffID: Int?
+    let termID: Int?
 
     enum CodingKeys: String, CodingKey {
         case courseID = "course_id"
@@ -62,5 +62,18 @@ public struct Section: Codable {
         case schoolID = "school_id"
         case staffID = "staff_id"
         case termID = "term_id"
+    }
+}
+
+extension SectionContainer {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        do {
+            let sectionsArray = try container.decode(Array<Section>.self, forKey: .sections)
+            self.init(sections: sectionsArray)
+        } catch DecodingError.typeMismatch( _, _) {
+            let section = try container.decode(Section.self, forKey: .sections)
+            self.init(sections: [section])
+        }
     }
 }

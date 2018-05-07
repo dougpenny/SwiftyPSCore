@@ -24,18 +24,18 @@
 //    swiftlint:disable identifier_name
 
 public struct Schools: Pagable {
-    private let schoolsWrapper: SchoolsContainer?
+    private var schoolsWrapper: SchoolContainer?
     public var data: [School]? {
         get { return schoolsWrapper?.schools }
-        set { data = newValue }
+        set { schoolsWrapper?.schools = newValue }
     }
     enum CodingKeys: String, CodingKey {
         case schoolsWrapper = "schools"
     }
 }
 
-private struct SchoolsContainer: Codable {
-    public let schools: [School]?
+private struct SchoolContainer: Codable {
+    var schools: [School]?
 
     enum CodingKeys: String, CodingKey {
         case schools = "school"
@@ -43,17 +43,17 @@ private struct SchoolsContainer: Codable {
 }
 
 public struct School: Codable {
-    public let id: Int?
-    public let schoolNumber: Int?
-    public let name: String?
-    public let stateProvinceID: String?
-    public let lowestGrade: Int?
-    public let highestGrade: Int?
-    public let alternateSchoolNumber: Int?
-    public let addresses: Addresses?
-    public let phones: Phones?
-    public let principal: Principal?
-    public let assistantPrincipal: Principal?
+    let id: Int?
+    let schoolNumber: Int?
+    let name: String?
+    let stateProvinceID: String?
+    let lowestGrade: Int?
+    let highestGrade: Int?
+    let alternateSchoolNumber: Int?
+    let addresses: Addresses?
+    let phones: Phones?
+    let principal: Principal?
+    let assistantPrincipal: Principal?
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -70,7 +70,20 @@ public struct School: Codable {
     }
 
     public struct Principal: Codable {
-        public let email: String?
-        public let name: Name?
+        let email: String?
+        let name: Name?
+    }
+}
+
+extension SchoolContainer {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        do {
+            let schoolsArray = try container.decode(Array<School>.self, forKey: .schools)
+            self.init(schools: schoolsArray)
+        } catch DecodingError.typeMismatch( _, _) {
+            let school = try container.decode(School.self, forKey: .schools)
+            self.init(schools: [school])
+        }
     }
 }
