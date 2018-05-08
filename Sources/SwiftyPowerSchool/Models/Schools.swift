@@ -21,8 +21,6 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
-//    swiftlint:disable identifier_name
-
 public struct Schools: Codable {
     private let schoolsWrapper: SchoolContainer?
     var data: [School]? {
@@ -78,7 +76,7 @@ extension SchoolContainer {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         do {
-            let schoolsArray = try container.decode(Array<School>.self, forKey: .schools)
+            let schoolsArray = try container.decode([School].self, forKey: .schools)
             self.init(schools: schoolsArray)
         } catch DecodingError.typeMismatch( _, _) {
             let school = try container.decode(School.self, forKey: .schools)

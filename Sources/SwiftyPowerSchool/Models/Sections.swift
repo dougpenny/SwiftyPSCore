@@ -67,7 +67,7 @@ extension SectionContainer {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         do {
-            let sectionsArray = try container.decode(Array<Section>.self, forKey: .sections)
+            let sectionsArray = try container.decode([Section].self, forKey: .sections)
             self.init(sections: sectionsArray)
         } catch DecodingError.typeMismatch( _, _) {
             let section = try container.decode(Section.self, forKey: .sections)
