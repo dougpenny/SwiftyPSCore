@@ -71,5 +71,26 @@
                 "section_number": "1"
             }
         ]
-    }
+    },
+    "testStudents" : [
+        {
+            "id": 1,
+            "local_id": 12345,
+            "student_username": 78654,
+            "name": {
+                "first_name": "Johnny",
+                "last_name": "Appleseed"
+            }
+        },
+        {
+            "id": 2,
+            "local_id": 45678,
+            "student_username": "sappleseed",
+            "name": {
+                "first_name": "Sally",
+                "middle_name": "M",
+                "last_name": "Appleseed"
+            }
+        }
+    ]
 }
