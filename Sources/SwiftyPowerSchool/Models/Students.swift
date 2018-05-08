@@ -40,6 +40,21 @@ private struct StudentContainer: Codable {
     }
 }
 
+extension StudentContainer {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        do {
+            let studentsArray = try container.decode([Student].self, forKey: .students)
+            self.init(students: studentsArray)
+        } catch DecodingError.typeMismatch(_, _) {
+            let student = try container.decode(Student.self, forKey: .students)
+            self.init(students: [student])
+        } catch DecodingError.keyNotFound(_, _) {
+            self.init(students: nil)
+        }
+    }
+}
+
 public struct Student: Codable {
     let addresses: Addresses?
     let dcid: Int?
@@ -60,15 +75,63 @@ public struct Student: Codable {
     }
 }
 
-extension StudentContainer {
-    init(from decoder: Decoder) throws {
+extension Student {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        var tempAddresses: Addresses?
         do {
-            let studentsArray = try container.decode(Array<Student>.self, forKey: .students)
-            self.init(students: studentsArray)
-        } catch DecodingError.typeMismatch(_, _) {
-            let student = try container.decode(Student.self, forKey: .students)
-            self.init(students: [student])
+            tempAddresses = try container.decode(Addresses.self, forKey: .addresses)
+        } catch DecodingError.keyNotFound(_, _) {
+            tempAddresses = nil
         }
+
+        var tempDCID: Int?
+        do {
+            tempDCID = try container.decode(Int.self, forKey: .dcid)
+        } catch DecodingError.keyNotFound(_, _) {
+            tempDCID = nil
+        }
+
+        var tempDemographics: Demographics?
+        do {
+            tempDemographics = try container.decode(Demographics.self, forKey: .demographics)
+        } catch DecodingError.keyNotFound(_, _) {
+            tempDemographics = nil
+        }
+
+        var tempName: Name?
+        do {
+            tempName = try container.decode(Name.self, forKey: .name)
+        } catch DecodingError.keyNotFound(_, _) {
+            tempName = nil
+        }
+
+        var tempPhones: Phones?
+        do {
+            tempPhones = try container.decode(Phones.self, forKey: .phones)
+        } catch DecodingError.keyNotFound(_, _) {
+            tempPhones = nil
+        }
+
+        var tempStudentNumber: Int?
+        do {
+            tempStudentNumber = try container.decode(Int.self, forKey: .studentNumber)
+        } catch DecodingError.keyNotFound(_, _) {
+            tempStudentNumber = nil
+        }
+
+        var tempStudentUsername: String?
+        do {
+            tempStudentUsername = try container.decode(String.self, forKey: .studentUsername)
+        } catch DecodingError.typeMismatch(_, _) {
+            let tempStudentUsernameInt = try container.decode(Int.self, forKey: .studentUsername)
+            tempStudentUsername = String(tempStudentUsernameInt)
+        } catch DecodingError.keyNotFound(_, _) {
+            tempStudentUsername = nil
+        }
+
+        self.init(addresses: tempAddresses, dcid: tempDCID, demographics: tempDemographics,
+                  name: tempName, phones: tempPhones, studentNumber: tempStudentNumber,
+                  studentUsername: tempStudentUsername)
     }
 }

@@ -21,8 +21,6 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
-//    swiftlint:disable line_length
-
 import Foundation
 
 extension SwiftyPowerSchool {
@@ -194,6 +192,21 @@ extension SwiftyPowerSchool {
                   params: ["teacher_id": "\(teacherID)"]) {sectionsObj, error in
             let sections = sectionsObj?.data
             completion(sections, error)
+        }
+    }
+
+    /**
+     Retrieve all students in the current district.
+
+     - parameters:
+     - students: An optional array of Student structs
+     - error: An optional error
+     */
+    public func studentsInDistrict(completion: @escaping (_ students: [Student]?, _ error: Error?) -> Void) {
+        let path = "/ws/v1/district/student"
+        fetchData(path: path, model: Students.self) {studentsObj, error in
+            let students = studentsObj?.data
+            completion(students, error)
         }
     }
 }

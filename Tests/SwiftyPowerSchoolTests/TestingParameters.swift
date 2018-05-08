@@ -56,4 +56,6 @@ public struct TestingParameters: Codable {
         let courseNumber: String
         let courseSections: [SectionInfo]?
     }
+
+    let testStudents: [Student]?
 }
