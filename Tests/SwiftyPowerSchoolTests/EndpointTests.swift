@@ -26,6 +26,12 @@ import XCTest
 
 class EndpointTests: XCTestCase {
     static var allTests = [
+            ("testEnrollmentsForSections", testEnrollmentsForSections),
+            ("testHomeroomRosterForTeacher", testHomeroomRosterForTeacher),
+            ("testSchoolsCount", testSchoolsCount),
+            ("testSectionsForCourseNumber", testSectionsForCourseNumber),
+            ("testSectionsForSchool", testSectionsForSchool),
+            ("testTeacherSections", testTeacherSections),
             ("testSchoolsCount", testSchoolsCount)
         ]
 
@@ -48,6 +54,68 @@ class EndpointTests: XCTestCase {
             }
         } else {
             print("File not found!")
+        }
+    }
+    
+    func testEnrollmentsForSections() {
+        if let testSection = self.params.testSection {
+            let enrollmentsForSectionsExpectation = self.expectation(description: "get section enrollments")
+            
+            client.enrollmentsForSections([testSection.sectionDCID]) { enrollments, error in
+                if let enrollments = enrollments {
+                    if let testEnrollments = testSection.enrollments {
+                        XCTAssertEqual(testEnrollments[0].dcid, enrollments[0].dcid)
+                        XCTAssertEqual(testEnrollments[0].gradeLevel, enrollments[0].gradeLevel)
+                        XCTAssertEqual(testEnrollments[0].lastFirst, enrollments[0].lastFirst)
+                        XCTAssertEqual(testEnrollments[1].studentNumber, enrollments[1].studentNumber)
+                        XCTAssertEqual(testEnrollments[1].gender, enrollments[1].gender)
+                        XCTAssertEqual(testEnrollments[1].id, enrollments[1].id)
+                        enrollmentsForSectionsExpectation.fulfill()
+                    } else {
+                        XCTFail(error?.localizedDescription ?? "There were no test section enrollments defined.")
+                    }
+                } else {
+                    XCTFail(error?.localizedDescription ?? "An error occured retreiving the section enrollments.")
+                }
+            }
+            
+            self.waitForExpectations(timeout: 1) { error in
+                if let error = error {
+                    XCTFail(error.localizedDescription)
+                }
+            }
+        } else {
+            XCTFail("No test section found.")
+        }
+    }
+    
+    func testHomeroomRosterForTeacher() {
+        if let testTeacher = self.params.testTeacher {
+            let teacherHomeroomRosterExpectation = self.expectation(description: "get homeroom roster")
+            
+            client.homeroomRosterForTeacher(testTeacher.teacherID) { homeroomRoster, error in
+                if let homeroomRoster = homeroomRoster {
+                    if let testHomeroomRoster = testTeacher.homeroomRoster {
+                        XCTAssertEqual(testHomeroomRoster[0].gradeLevel, homeroomRoster[0].gradeLevel)
+                        XCTAssertEqual(testHomeroomRoster[0].lastFirst, homeroomRoster[0].lastFirst)
+                        XCTAssertEqual(testHomeroomRoster[1].studentNumber, homeroomRoster[1].studentNumber)
+                        XCTAssertEqual(testHomeroomRoster[1].gender, homeroomRoster[1].gender)
+                        teacherHomeroomRosterExpectation.fulfill()
+                    } else {
+                        XCTFail(error?.localizedDescription ?? "There was no test homeroom roster defined.")
+                    }
+                } else {
+                    XCTFail(error?.localizedDescription ?? "An error occured retreiving the teacher's homeroom roster.")
+                }
+            }
+            
+            self.waitForExpectations(timeout: 1) { error in
+                if let error = error {
+                    XCTFail(error.localizedDescription)
+                }
+            }
+        } else {
+            XCTFail("No test teacher found.")
         }
     }
 
@@ -123,6 +191,100 @@ class EndpointTests: XCTestCase {
             if let error = error {
                 XCTFail(error.localizedDescription)
             }
+        }
+    }
+
+    func testSectionsForCourseNumber() {
+        if let testCourse = self.params.testCourse {
+            let courseSectionsExpectation = self.expectation(description: "get sections for course number")
+
+            client.sectionsForCourseNumber(testCourse.courseNumber) { courseSections, error in
+                if let courseSections = courseSections {
+                    if let testCourseSections = testCourse.courseSections {
+                        XCTAssertEqual(testCourseSections[0].courseNumber, courseSections[0].courseNumber)
+                        XCTAssertEqual(testCourseSections[0].courseName, courseSections[0].courseName)
+                        XCTAssertEqual(testCourseSections[0].period, courseSections[0].period)
+                        XCTAssertEqual(testCourseSections[0].room, courseSections[0].room)
+                        XCTAssertEqual(testCourseSections[0].numStudents, courseSections[0].numStudents)
+                        XCTAssertEqual(testCourseSections[0].id, courseSections[0].id)
+                        XCTAssertEqual(testCourseSections[0].teacherID, courseSections[0].teacherID)
+                        XCTAssertEqual(testCourseSections[0].dcid, courseSections[0].dcid)
+                        XCTAssertEqual(testCourseSections[0].sectionNumber, courseSections[0].sectionNumber)
+                        courseSectionsExpectation.fulfill()
+                    } else {
+                        XCTFail(error?.localizedDescription ?? "There were no test sections defined.")
+                    }
+                } else {
+                    XCTFail(error?.localizedDescription ?? "An error occured retreiving the course sections.")
+                }
+            }
+
+            self.waitForExpectations(timeout: 1) { error in
+                if let error = error {
+                    XCTFail(error.localizedDescription)
+                }
+            }
+        } else {
+            XCTFail("No test course found.")
+        }
+    }
+    
+    func testSectionsForSchool() {
+        let schoolSectionsExpectation = self.expectation(description: "get sections for school")
+        
+        client.sectionsForSchool(1) { sections, error in
+            if let sections = sections {
+                self.client.sectionsCountForSchool(1) { sectionsCount, error in
+                    if let sectionsCount = sectionsCount {
+                        XCTAssertEqual(sections.count, sectionsCount)
+                        schoolSectionsExpectation.fulfill()
+                    }
+                }
+            }
+            else {
+                XCTFail()
+            }
+        }
+        
+        self.waitForExpectations(timeout: 5) { error in
+            if let error = error {
+                XCTFail(error.localizedDescription)
+            }
+        }
+    }
+
+    func testTeacherSections() {
+        if let testTeacher = self.params.testTeacher {
+            let teacherSectionsExpectation = self.expectation(description: "get teacher sections")
+
+            client.sectionsForTeacher(testTeacher.teacherID) { teacherSections, error in
+                if let teacherSections = teacherSections {
+                    if let testTeacherSections = testTeacher.teacherSections {
+                        XCTAssertEqual(testTeacherSections[0].courseNumber, teacherSections[0].courseNumber)
+                        XCTAssertEqual(testTeacherSections[0].courseName, teacherSections[0].courseName)
+                        XCTAssertEqual(testTeacherSections[0].period, teacherSections[0].period)
+                        XCTAssertEqual(testTeacherSections[0].room, teacherSections[0].room)
+                        XCTAssertEqual(testTeacherSections[0].numStudents, teacherSections[0].numStudents)
+                        XCTAssertEqual(testTeacherSections[0].id, teacherSections[0].id)
+                        XCTAssertEqual(testTeacherSections[0].teacherID, teacherSections[0].teacherID)
+                        XCTAssertEqual(testTeacherSections[0].dcid, teacherSections[0].dcid)
+                        XCTAssertEqual(testTeacherSections[0].sectionNumber, teacherSections[0].sectionNumber)
+                        teacherSectionsExpectation.fulfill()
+                    } else {
+                        XCTFail(error?.localizedDescription ?? "There were no test sections defined.")
+                    }
+                } else {
+                    XCTFail(error?.localizedDescription ?? "An error occured retreiving the teacher's sections.")
+                }
+            }
+
+            self.waitForExpectations(timeout: 1) { error in
+                if let error = error {
+                    XCTFail(error.localizedDescription)
+                }
+            }
+        } else {
+            XCTFail("No test teacher found.")
         }
     }
 }

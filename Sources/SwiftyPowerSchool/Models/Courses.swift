@@ -21,11 +21,11 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
-public struct Courses: Codable {
-    private let coursesWrapper: CourseContainer?
-
+public struct Courses: Pagable {
+    private var coursesWrapper: CourseContainer?
     var data: [Course]? {
-        return self.coursesWrapper?.courses
+        get { return self.coursesWrapper?.courses }
+        set { coursesWrapper?.courses = newValue }
     }
 
     enum CodingKeys: String, CodingKey {
@@ -34,7 +34,7 @@ public struct Courses: Codable {
 }
 
 private struct CourseContainer: Codable {
-    let courses: [Course]?
+    var courses: [Course]?
 
     enum CodingKeys: String, CodingKey {
         case courses = "course"

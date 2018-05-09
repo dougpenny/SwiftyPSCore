@@ -23,25 +23,84 @@
 
 import Foundation
 
+protocol Pagable: Codable {
+    associatedtype Model: Codable
+    var data: [Model]? { get set }
+}
+
 public class SwiftyPowerSchool {
     let baseURL: URL?
     let clientID: String
     let clientSecret: String
     var token: Token?
-    var metadata: Metadata?
+    fileprivate var metadata: Metadata?
 
     public init(_ baseURL: String, clientID: String, clientSecret: String) {
         self.baseURL = URL(string: baseURL)
         self.clientID = clientID
         self.clientSecret = clientSecret
     }
-
+    
+    func metadata(completion: @escaping (Metadata?, Error?) -> Void) {
+        if self.metadata != nil {
+            completion(self.metadata, nil)
+        }
+        else {
+            let path = (baseURL?.absoluteString)! + "/ws/v1/metadata"
+            self.fetchData(path: path, model: Metadata.self) { metadataObject, error in
+                if let metadataObject = metadataObject {
+                    self.metadata = metadataObject
+                    completion(self.metadata, error)
+                }
+                else {
+                    completion(nil, error)
+                }
+            }
+        }
+    }
+    
+    func fetchData<Model: Pagable>(path: String,
+                                   model: Model.Type,
+                                   method: String = "GET",
+                                   params: [String: Any]? = nil,
+                                   completion: @escaping (Model?, Error?) -> Void) {
+        var allData: [Model.Model] = []
+        resourceCount(path: path) { resourceCount, error in
+            if let resourceCount = resourceCount {
+                let pageSize = 50
+                let numberOfPages = (resourceCount + pageSize - 1)/pageSize
+                for page in 1...numberOfPages {
+                    let fullPath = path + "?pagesize=\(pageSize)&page=\(page)"
+                    self.genericFetchData(path: fullPath, model: model) { dataObj, error in
+                        let data = dataObj?.data
+                        var dataObj = dataObj
+                        allData += data ?? []
+                        if allData.count == resourceCount {
+                            dataObj?.data = allData
+                            completion(dataObj, nil)
+                        }
+                    }
+                }
+            } else {
+                completion(nil, error)
+            }
+        }
+    }
+    
     func fetchData<Model: Codable>(path: String,
                                    model: Model.Type,
                                    method: String = "GET",
                                    params: [String: Any]? = nil,
                                    completion: @escaping (Model?, Error?) -> Void) {
-        clientURLRequest(path: path, method: method, params: params, completion: { request, error in
+        genericFetchData(path: path, model: model, method: method, params: params, completion: completion)
+    }
+    
+    fileprivate func genericFetchData<Model: Codable>(path: String,
+                                                      model: Model.Type,
+                                                      method: String = "GET",
+                                                      params: [String: Any]? = nil,
+                                                      completion: @escaping (Model?, Error?) -> Void) {
+        clientURLRequest(path: path, method: method, params: params) { request, error in
             if let request = request {
                 self.dataTask(request: request, method: method) { data, error in
                     if let data = data {
@@ -59,7 +118,7 @@ public class SwiftyPowerSchool {
             } else {
                 completion(nil, error)
             }
-        })
+        }
     }
 
     private func requestAuthToken(completion: @escaping (Bool, Error?) -> Void) {
