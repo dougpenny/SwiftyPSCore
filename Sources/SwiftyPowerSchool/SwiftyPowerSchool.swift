@@ -40,25 +40,23 @@ public class SwiftyPowerSchool {
         self.clientID = clientID
         self.clientSecret = clientSecret
     }
-    
+
     func metadata(completion: @escaping (Metadata?, Error?) -> Void) {
         if self.metadata != nil {
             completion(self.metadata, nil)
-        }
-        else {
+        } else {
             let path = (baseURL?.absoluteString)! + "/ws/v1/metadata"
             self.fetchData(path: path, model: Metadata.self) { metadataObject, error in
                 if let metadataObject = metadataObject {
                     self.metadata = metadataObject
                     completion(self.metadata, error)
-                }
-                else {
+                } else {
                     completion(nil, error)
                 }
             }
         }
     }
-    
+
     func fetchData<Model: Pagable>(path: String,
                                    model: Model.Type,
                                    method: String = "GET",
@@ -86,7 +84,7 @@ public class SwiftyPowerSchool {
             }
         }
     }
-    
+
     func fetchData<Model: Codable>(path: String,
                                    model: Model.Type,
                                    method: String = "GET",
@@ -94,7 +92,7 @@ public class SwiftyPowerSchool {
                                    completion: @escaping (Model?, Error?) -> Void) {
         genericFetchData(path: path, model: model, method: method, params: params, completion: completion)
     }
-    
+
     fileprivate func genericFetchData<Model: Codable>(path: String,
                                                       model: Model.Type,
                                                       method: String = "GET",

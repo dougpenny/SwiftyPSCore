@@ -142,7 +142,7 @@ extension SwiftyPowerSchool {
             completion(sectionsObj?.data, error)
         }
     }
-    
+
     /**
      Retrieve sections assigned to a given teacher for the current school year.
 
