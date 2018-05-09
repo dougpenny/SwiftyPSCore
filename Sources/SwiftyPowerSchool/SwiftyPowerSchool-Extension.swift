@@ -79,7 +79,15 @@ extension SwiftyPowerSchool {
         }
     }
 
-    public func resourceCount(path: String, completion: @escaping (Int?, Error?) -> Void) {
+    /**
+     Retrieve the count of a resource.
+
+     - parameters:
+       - path: The path of the resource
+       - count: An optional count
+       - error: An optional error
+     */
+    public func resourceCount(path: String, completion: @escaping (_ count: Int?, _ error: Error?) -> Void) {
         fetchData(path: path + "/count", model: ResourceCount.self, method: "GET") {resourceCount, error in
             let count = resourceCount?.count
             completion(count, error)
@@ -98,16 +106,6 @@ extension SwiftyPowerSchool {
         self.fetchData(path: basePath, model: Schools.self) { schoolsObj, error in
             completion(schoolsObj?.data, error)
         }
-    }
-
-    public func schoolsCount(completion: @escaping (Int?, Error?) -> Void) {
-        let path = "/ws/v1/district/school"
-        resourceCount(path: path, completion: completion)
-    }
-
-    public func sectionsCountForSchool(_ schoolID: Int, completion: @escaping (Int?, Error?) -> Void) {
-        let path = "/ws/v1/school/\(schoolID)/section"
-        resourceCount(path: path, completion: completion)
     }
 
     /**
@@ -142,7 +140,7 @@ extension SwiftyPowerSchool {
             completion(sectionsObj?.data, error)
         }
     }
-    
+
     /**
      Retrieve sections assigned to a given teacher for the current school year.
 

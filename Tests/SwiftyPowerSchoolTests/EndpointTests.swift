@@ -28,11 +28,10 @@ class EndpointTests: XCTestCase {
     static var allTests = [
             ("testEnrollmentsForSections", testEnrollmentsForSections),
             ("testHomeroomRosterForTeacher", testHomeroomRosterForTeacher),
-            ("testSchoolsCount", testSchoolsCount),
+            ("testResourceCount", testResourceCount),
             ("testSectionsForCourseNumber", testSectionsForCourseNumber),
             ("testSectionsForSchool", testSectionsForSchool),
             ("testTeacherSections", testTeacherSections),
-            ("testSchoolsCount", testSchoolsCount)
         ]
 
     var client: SwiftyPowerSchool!
@@ -171,19 +170,20 @@ class EndpointTests: XCTestCase {
         }
     }
 
-    func testSchoolsCount() {
-        let schoolsCountExpectation = self.expectation(description: "get schools count")
+    func testResourceCount() {
+        let resourceCountExpectation = self.expectation(description: "get count of a resource")
+        let resourcePath = "/ws/v1/district/school"
 
-        client.schoolsCount { schoolsCount, error in
-            if let schoolsCount = schoolsCount {
+        client.resourceCount(path: resourcePath) { resourceCount, error in
+            if let resourceCount = resourceCount {
                 if let testCount = self.params.schoolsCount {
-                    XCTAssertEqual(testCount, schoolsCount)
-                    schoolsCountExpectation.fulfill()
+                    XCTAssertEqual(resourceCount, testCount)
+                    resourceCountExpectation.fulfill()
                 } else {
                     XCTFail(error?.localizedDescription ?? "A schools count test item was not defined.")
                 }
             } else {
-                XCTFail(error?.localizedDescription ?? "An error occured retreiving the schools count.")
+                XCTFail(error?.localizedDescription ?? "An error occured retreiving the resource count.")
             }
         }
 
@@ -231,10 +231,12 @@ class EndpointTests: XCTestCase {
     
     func testSectionsForSchool() {
         let schoolSectionsExpectation = self.expectation(description: "get sections for school")
-        
-        client.sectionsForSchool(1) { sections, error in
+        let schoolID = 1
+        let resourcePath = "/ws/v1/school/\(schoolID)/section"
+
+        client.sectionsForSchool(schoolID) { sections, error in
             if let sections = sections {
-                self.client.sectionsCountForSchool(1) { sectionsCount, error in
+                self.client.resourceCount(path: resourcePath) { sectionsCount, error in
                     if let sectionsCount = sectionsCount {
                         XCTAssertEqual(sections.count, sectionsCount)
                         schoolSectionsExpectation.fulfill()
