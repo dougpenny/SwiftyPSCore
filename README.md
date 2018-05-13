@@ -56,53 +56,83 @@ if let baseURL = ProcessInfo.processInfo.environment["BASE_URL"],
 
 Now you can use your client to retrieve many different resources. Below are a few examples with more coming soon.
 
-### Schools
+### Enrollments for sections
 ```swift
-client.getSchools() { schools, error in
-  if let schools = schools {
-    print("Array of schools: \(schools)")
-  }
-  else {
-    print(error?.localizedDescription ?? "Generic error")
-  }
+client.enrollmentsForSections([testSection.sectionDCID]) { enrollments, error in
+    if let enrollments = enrollments {
+        // enrollments: [StudentItem]
+    } else {
+        // error: Error
+    }
 }
 ```
 
-### Courses
+### Homeroom roster for teacher
 ```swift
-client.getCoursesFromSchool(1) { courses, error in
-  if let courses = courses {
-    print("Array of courses: \(courses)")
-  }
-  else {
-    print(error?.localizedDescription ?? "Generic error")
-  }
+client.homeroomRosterForTeacher(testTeacher.teacherID) { homeroomRoster, error in
+    if let homeroomRoster = homeroomRoster {
+        // homeroomRoster: ClassRoster
+    } else {
+        // error: Error
+    }
 }
 ```
 
-### Sections
+### Resource count
 ```swift
-client.getSectionsFromSchool(3) { sections, error in
-  if let sections = sections {
-    print("Array of sections: \(sections)")
-  }
-  else {
-    print(error?.localizedDescription ?? "Generic error")
-  }
+client.resourceCount(path: resourcePath) { resourceCount, error in
+    if let resourceCount = resourceCount {
+        // resourceCount: ResourceCount
+    } else {
+        // error: Error
+    }
 }
 ```
 
-### Number of schools
+### All students
 ```swift
-client.getSchoolsCount() { schoolsCount, error in
-  if let schoolsCount = schoolsCount {
-    print("Number of schools: \(schoolsCount)")
-  }
-  else {
-    print(error?.localizedDescription ?? "Generic error 2")
-  }
+client.studentsInDistrict { students, error in
+    if let students = students {
+        // students: [Student]
+    } else {
+        // error: Error
+    }
 }
 ```
+
+### Sections for course number
+```swift
+client.sectionsForCourseNumber(testCourse.courseNumber) { sections, error in
+    if let sections = sections {
+        // sections: [Section]
+    } else {
+        // error: Error
+    }
+}
+```
+
+### Sections for school
+```swift
+client.sectionsForSchool(schoolID) { sections, error in
+    if let sections = sections {
+        // sections: [Section]
+    } else {
+        // error: Error
+    }
+}
+```
+
+### Sections for teacher
+```swift
+client.sectionsForTeacher(testTeacher.teacherID) { sections, error in
+    if let sections = sections {
+        // sections: [SectionInfo]
+    } else {
+        // error: Error
+    }
+}
+```
+
 
 ### PowerQueries
 PowerQueries are a feature that allows you create custom API endpoints. You define the data to be returned and write a SQL select statement to fetch the data. PowerQueries are created through the PowerSchool plugin interface. You can see an example of one in our sample PowerSchool plugin, [SwiftyPowerSchool-Plugin](https://github.com/NRCA/SwiftyPowerSchool-Plugin). You can learn more about PowerQueries on the [PowerSchool Developer Support](https://support.powerschool.com/developer/#/page/powerqueries) site.
