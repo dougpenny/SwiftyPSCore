@@ -27,7 +27,7 @@ public struct Sections: Pagable {
         get { return sectionsWrapper?.sections }
         set { sectionsWrapper?.sections = newValue }
     }
-    
+
     enum CodingKeys: String, CodingKey {
         case sectionsWrapper = "sections"
     }
