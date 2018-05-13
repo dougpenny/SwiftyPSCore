@@ -29,9 +29,10 @@ class EndpointTests: XCTestCase {
             ("testEnrollmentsForSections", testEnrollmentsForSections),
             ("testHomeroomRosterForTeacher", testHomeroomRosterForTeacher),
             ("testResourceCount", testResourceCount),
+            ("testRetrieveAllStudents", testRetrieveAllStudents),
             ("testSectionsForCourseNumber", testSectionsForCourseNumber),
             ("testSectionsForSchool", testSectionsForSchool),
-            ("testTeacherSections", testTeacherSections),
+            ("testSectionsForTeacher", testSectionsForTeacher),
         ]
 
     var client: SwiftyPowerSchool!
@@ -255,9 +256,9 @@ class EndpointTests: XCTestCase {
         }
     }
 
-    func testTeacherSections() {
+    func testSectionsForTeacher() {
         if let testTeacher = self.params.testTeacher {
-            let teacherSectionsExpectation = self.expectation(description: "get teacher sections")
+            let teacherSectionsExpectation = self.expectation(description: "get sections for teacher")
 
             client.sectionsForTeacher(testTeacher.teacherID) { teacherSections, error in
                 if let teacherSections = teacherSections {
