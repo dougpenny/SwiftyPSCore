@@ -38,10 +38,20 @@ class PowerQueryTests: XCTestCase {
     override func setUp() {
         super.setUp()
         print("PowerQueryTests setup called--")
-        if let paramFilePath = Bundle(for: type(of: self)).path(forResource: "testing_parameters", ofType: "json") {
+        /**
+         This is a temporary workaround becuase Swift packages do not currently support resources. This will be
+         resolved in Swift 5.3: https://github.com/apple/swift-evolution/blob/master/proposals/0271-package-manager-resources.md
+         
+         The following 4 lines can be replaced with the following single line of code:
+         if let paramFilePath = Bundle(for: type(of: self)).path(forResource: "testing_parameters", ofType: "json")
+         */
+        let thisSourceFile = URL(fileURLWithPath: #file)
+        let thisDirectory = thisSourceFile.deletingLastPathComponent()
+        let paramFileURL = thisDirectory.appendingPathComponent("testing_parameters.json")
+        if paramFileURL != URL(fileURLWithPath: "") {
             let decoder = JSONDecoder()
             do {
-                let paramData = try Data(contentsOf: URL(fileURLWithPath: paramFilePath))
+                let paramData = try Data(contentsOf: paramFileURL)
                 self.params = try decoder.decode(TestingParameters.self, from: paramData)
                 self.client = SwiftyPowerSchool(self.params.baseURL,
                                                 clientID: self.params.clientID,
@@ -90,7 +100,7 @@ class PowerQueryTests: XCTestCase {
         if let testTeacher = self.params.testTeacher {
             let teacherHomeroomRosterExpectation = self.expectation(description: "get homeroom roster")
 
-            client.homeroomRosterForTeacher(testTeacher.teacherID) { homeroomRoster, error in
+            client.homeroomRosterForTeacher(testTeacher.dcid) { homeroomRoster, error in
                 if let homeroomRoster = homeroomRoster {
                     if let testHomeroomRoster = testTeacher.homeroomRoster {
                         XCTAssertEqual(testHomeroomRoster[0].gradeLevel, homeroomRoster[0].gradeLevel)

@@ -66,14 +66,14 @@ extension SwiftyPowerSchool {
      By default, any course with the course number \"HR\" or a course number
      starting with \"Att\" is considered a homeroom.
      - parameters:
-       - teacherID: The teacher ID (not the DCID or teacher number)
+       - teacherDCID: The teacher DCID (not the teacher number)
        - studentItem: An optional array of PowerQueryStudents
        - error: An optional error
      */
-    public func homeroomRosterForTeacher(_ teacherID: Int, completion: @escaping (_ studentItem: [StudentItem]?, _ error: Error?) -> Void) {
+    public func homeroomRosterForTeacher(_ teacherDCID: Int, completion: @escaping (_ studentItem: [StudentItem]?, _ error: Error?) -> Void) {
         let path = "/ws/schema/query/com.nrcaknights.swiftypowerschool.students.homeroom_roster_for_teacher"
         fetchData(path: path, model: ClassRoster.self, method: "POST",
-                  params: ["teacher_id": "\(teacherID)"]) {rosterObj, error in
+                  params: ["teacher_dcid": "\(teacherDCID)"]) {rosterObj, error in
                     let classRoster = rosterObj?.data
                     completion(classRoster, error)
         }
@@ -164,9 +164,9 @@ extension SwiftyPowerSchool {
     /**
      Retrieve all students in the current district.
 
-     - parameters:
-     - students: An optional array of Student structs
-     - error: An optional error
+     - returns:
+        - students: An optional array of Student structs
+        - error: An optional error
      */
     public func studentsInDistrict(completion: @escaping (_ students: [Student]?, _ error: Error?) -> Void) {
         let path = "/ws/v1/district/student"
@@ -175,4 +175,21 @@ extension SwiftyPowerSchool {
             completion(students, error)
         }
     }
+    
+    /**
+     Retrieve student info and lunch balance based on student lunch ID.
+
+     - important: PowerQuery Endpoint
+     - parameters:
+       - lunchID: The student lunch ID
+       - error: An optional error
+     */
+//    public func lunchBalanceForStudent(_ lunchID: Int, completion: @escaping (_ sectionsInfo: [SectionInfo]?, _ error: Error?) -> Void) {
+//        let path = "/ws/schema/query/com.nrcaknights.swiftypowerschool.section.for_teacher"
+//        fetchData(path: path, model: PowerQuerySections.self, method: "POST",
+//                  params: ["teacher_id": "\(teacherID)"]) {sectionsObj, error in
+//            let sections = sectionsObj?.data
+//            completion(sections, error)
+//        }
+//    }
 }

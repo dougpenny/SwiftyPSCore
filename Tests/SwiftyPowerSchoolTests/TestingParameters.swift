@@ -21,6 +21,8 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
+@testable import SwiftyPowerSchool
+
 public struct TestingParameters: Codable {
     let baseURL: String
     let clientID: String
@@ -38,6 +40,7 @@ public struct TestingParameters: Codable {
 
     public struct TestTeacher: Codable {
         let teacherID: Int
+        let dcid: Int
         let teacherSections: [SectionInfo]?
         let teacherSectionsCount: Int?
         let homeroomRoster: [StudentItem]?

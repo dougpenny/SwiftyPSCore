@@ -24,7 +24,7 @@ _SwiftyPowerSchool is not endorsed, sponsored, or affilitated with PowerSchool i
 ---
 
 ## Installation
-Before using _SwiftyPowerSchool_ in your application, you will first need to create and install a Plugin XML file for your PowerSchool server. Information about creating the plugin file can be found on the[PowerSchool Developer Support](https://support.powerschool.com/developer/#/page/plugin-xml) site. We have created an example plugin ([SwiftyPowerSchool-Plugin](https://github.com/NRCA/SwiftyPowerSchool-Plugin)) that you can use as is, or modify as you see fit. Once you have installed the plugin, you will be provided a client ID and client secret that you will use for authenticating with the PowerSchool server.
+Before using _SwiftyPowerSchool_ in your application, you will first need to create and install a Plugin XML file for your PowerSchool server. Information about creating the plugin file can be found on the [PowerSchool Developer Support](https://support.powerschool.com/developer/#/page/plugin-xml) site. We have created an example plugin ([SwiftyPowerSchool-Plugin](https://github.com/NRCA/SwiftyPowerSchool-Plugin)) that you can use as is, or modify as you see fit. Once you have installed the plugin, you will be provided a client ID and client secret that you will use for authenticating with the PowerSchool server.
 
 ### Swift Package Manager
 To include SwiftyPowerSchool in a [Swift Package Manager](https://swift.org/package-manager/) package, add it to the `dependencies` attribute defined in your `Package.swift` file. For example:
