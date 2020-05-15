@@ -22,7 +22,7 @@
 //    SOFTWARE.
 
 import XCTest
-@testable import SwiftyPowerSchool
+@testable import SwiftyPowerSchoolCore
 
 
 class EndpointTests: XCTestCase {

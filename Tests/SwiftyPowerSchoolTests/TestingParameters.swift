@@ -21,7 +21,7 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
-@testable import SwiftyPowerSchool
+@testable import SwiftyPowerSchoolCore
 
 public struct TestingParameters: Codable {
     let baseURL: String

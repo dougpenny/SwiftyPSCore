@@ -24,7 +24,7 @@
 //    swiftlint:disable function_body_length type_body_length line_length
 
 import XCTest
-@testable import SwiftyPowerSchool
+@testable import SwiftyPowerSchoolCore
 
 class ModelTests: XCTestCase {
     static var allTests = [

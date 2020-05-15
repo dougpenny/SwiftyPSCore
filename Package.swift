@@ -3,14 +3,14 @@
 import PackageDescription
 
 let package = Package(
-    name: "SwiftyPowerSchool",
+    name: "SwiftyPowerSchoolCore",
     products: [
-        .library(name: "SwiftyPowerSchool", targets: ["SwiftyPowerSchool"])
+        .library(name: "SwiftyPowerSchoolCore", targets: ["SwiftyPowerSchoolCore"])
     ],
     dependencies: [
     ],
     targets: [
-        .target(name: "SwiftyPowerSchool", dependencies: []),
-        .testTarget(name: "SwiftyPowerSchoolTests", dependencies: ["SwiftyPowerSchool"])
+        .target(name: "SwiftyPowerSchoolCore", dependencies: []),
+        .testTarget(name: "SwiftyPowerSchoolTests", dependencies: ["SwiftyPowerSchoolCore"])
     ]
 )

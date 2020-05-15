@@ -4,7 +4,7 @@
 [![MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
 
-SwiftyPowerSchool is a pure Swift PowerSchool API client. Our goal is to simplify the process of communicating with the [PowerSchool Student Information System](https://www.powerschool.com/solutions/student-information-system-sis/) API by handling authentication and decoding, allowing you to focus on using the data, not retrieving it.
+SwiftyPowerSchoolCore is a pure Swift PowerSchool API client. Our goal is to simplify the process of communicating with the [PowerSchool Student Information System](https://www.powerschool.com/solutions/student-information-system-sis/) API by handling authentication and decoding, allowing you to focus on using the data, not retrieving it.
 
 _SwiftyPowerSchool is not endorsed, sponsored, or affilitated with PowerSchool in any way. Swift and the Swift logo are trademarks of Apple Inc._
 
@@ -24,10 +24,10 @@ _SwiftyPowerSchool is not endorsed, sponsored, or affilitated with PowerSchool i
 ---
 
 ## Installation
-Before using _SwiftyPowerSchool_ in your application, you will first need to create and install a Plugin XML file for your PowerSchool server. Information about creating the plugin file can be found on the [PowerSchool Developer Support](https://support.powerschool.com/developer/#/page/plugin-xml) site. We have created an example plugin ([SwiftyPowerSchool-Plugin](https://github.com/NRCA/SwiftyPowerSchool-Plugin)) that you can use as is, or modify as you see fit. Once you have installed the plugin, you will be provided a client ID and client secret that you will use for authenticating with the PowerSchool server.
+Before using _SwiftyPowerSchoolCore_ in your application, you will first need to create and install a Plugin XML file for your PowerSchool server. Information about creating the plugin file can be found on the [PowerSchool Developer Support](https://support.powerschool.com/developer/#/page/plugin-xml) site. We have created an example plugin ([SwiftyPowerSchoolCore-Plugin](https://github.com/NRCA/SwiftyPowerSchool-Plugin)) that you can use as is, or modify as you see fit. Once you have installed the plugin, you will be provided a client ID and client secret that you will use for authenticating with the PowerSchool server.
 
 ### Swift Package Manager
-To include SwiftyPowerSchool in a [Swift Package Manager](https://swift.org/package-manager/) package, add it to the `dependencies` attribute defined in your `Package.swift` file. For example:
+To include SwiftyPowerSchoolCore in a [Swift Package Manager](https://swift.org/package-manager/) package, add it to the `dependencies` attribute defined in your `Package.swift` file. For example:
 ```swift
 dependencies: [
   .package(url: "https://github.com/nrca/swiftypowerschool.git", from: "1.0.0-beta1")
