@@ -57,7 +57,7 @@ public class SwiftyPowerSchool {
         }
     }
 
-    func fetchData<Model: Pagable>(path: String,
+    public func fetchData<Model: Pagable>(path: String,
                                    model: Model.Type,
                                    method: String = "GET",
                                    params: [String: Any]? = nil,
@@ -86,7 +86,7 @@ public class SwiftyPowerSchool {
         }
     }
 
-    func fetchData<Model: Codable>(path: String,
+    public func fetchData<Model: Codable>(path: String,
                                    model: Model.Type,
                                    method: String = "GET",
                                    params: [String: Any]? = nil,

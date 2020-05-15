@@ -1,7 +1,7 @@
 //
 //    SwiftyPowerSchool-Extension.swift
 //
-//    Copyright (c) 2018 Cooper Edmunds & Doug Penny – North Raleigh Christian Academy
+//    Copyright (c) 2020 Cooper Edmunds & Doug Penny – North Raleigh Christian Academy
 //
 //    Permission is hereby granted, free of charge, to any person obtaining a copy
 //    of this software and associated documentation files (the "Software"), to deal
@@ -58,28 +58,6 @@ extension SwiftyPowerSchool {
     }
 
     /**
-     Retrieve the current homeroom roster for the given teacher.
-
-     - Important: PowerQuery Endpoint
-     - Note: Setting what is considered a homeroom can be changed in the
-     [SwiftyPowerSchool-Plugin](https://github.com/NRCA/SwiftyPowerSchool-Plugin).
-     By default, any course with the course number \"HR\" or a course number
-     starting with \"Att\" is considered a homeroom.
-     - parameters:
-       - teacherDCID: The teacher DCID (not the teacher number)
-       - studentItem: An optional array of PowerQueryStudents
-       - error: An optional error
-     */
-    public func homeroomRosterForTeacher(_ teacherDCID: Int, completion: @escaping (_ studentItem: [StudentItem]?, _ error: Error?) -> Void) {
-        let path = "/ws/schema/query/com.nrcaknights.swiftypowerschool.students.homeroom_roster_for_teacher"
-        fetchData(path: path, model: ClassRoster.self, method: "POST",
-                  params: ["teacher_dcid": "\(teacherDCID)"]) {rosterObj, error in
-                    let classRoster = rosterObj?.data
-                    completion(classRoster, error)
-        }
-    }
-
-    /**
      Retrieve the count of a resource.
 
      - parameters:
@@ -119,24 +97,6 @@ extension SwiftyPowerSchool {
     }
 
     /**
-     Retrieve all sections of the given course number for the current school year.
-
-     - Important: PowerQuery Endpoint
-     - parameters:
-       - courseNumber: The course number you would like to get current sections for (i.e. CSC101)
-       - sectionsInfo: An optional array of PowerQuerySections
-       - error: An optional error
-     */
-    public func sectionsForCourseNumber(_ courseNumber: String, completion: @escaping (_ sectionsInfo: [SectionInfo]?, _ error: Error?) -> Void) {
-        let path = "/ws/schema/query/com.nrcaknights.swiftypowerschool.section.for_course_number"
-        fetchData(path: path, model: PowerQuerySections.self, method: "POST",
-                  params: ["course_number": "\(courseNumber)"]) {sectionsObj, error in
-                    let sections = sectionsObj?.data
-                    completion(sections, error)
-        }
-    }
-
-    /**
      Retrieve all sections from the given school for the current school year.
      
      - parameters:
@@ -148,24 +108,6 @@ extension SwiftyPowerSchool {
         let basePath = "/ws/v1/school/\(schoolID)/section"
         self.fetchData(path: basePath, model: Sections.self) { sectionsObj, error in
             completion(sectionsObj?.data, error)
-        }
-    }
-
-    /**
-     Retrieve sections assigned to a given teacher for the current school year.
-
-     - Important: PowerQuery Endpoint
-     - parameters:
-       - teacherID: The teacher ID (not the DCID or teacher number)
-       - sectionsInfo: An optional array of PowerQuerySections
-       - error: An optional error
-     */
-    public func sectionsForTeacher(_ teacherID: Int, completion: @escaping (_ sectionsInfo: [SectionInfo]?, _ error: Error?) -> Void) {
-        let path = "/ws/schema/query/com.nrcaknights.swiftypowerschool.section.for_teacher"
-        fetchData(path: path, model: PowerQuerySections.self, method: "POST",
-                  params: ["teacher_id": "\(teacherID)"]) {sectionsObj, error in
-            let sections = sectionsObj?.data
-            completion(sections, error)
         }
     }
 
@@ -183,21 +125,4 @@ extension SwiftyPowerSchool {
             completion(students, error)
         }
     }
-    
-    /**
-     Retrieve student info and lunch balance based on student lunch ID.
-
-     - important: PowerQuery Endpoint
-     - parameters:
-       - lunchID: The student lunch ID
-       - error: An optional error
-     */
-//    public func lunchBalanceForStudent(_ lunchID: Int, completion: @escaping (_ sectionsInfo: [SectionInfo]?, _ error: Error?) -> Void) {
-//        let path = "/ws/schema/query/com.nrcaknights.swiftypowerschool.section.for_teacher"
-//        fetchData(path: path, model: PowerQuerySections.self, method: "POST",
-//                  params: ["teacher_id": "\(teacherID)"]) {sectionsObj, error in
-//            let sections = sectionsObj?.data
-//            completion(sections, error)
-//        }
-//    }
 }
