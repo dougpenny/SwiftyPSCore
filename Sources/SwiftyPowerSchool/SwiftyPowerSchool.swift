@@ -70,12 +70,13 @@ public class SwiftyPowerSchool {
                 for page in 1...numberOfPages {
                     let fullPath = path + "?pagesize=\(pageSize)&page=\(page)"
                     self.genericFetchData(path: fullPath, model: model) { dataObj, error in
+                        if error != nil { completion(nil, error) }
                         let data = dataObj?.data
                         var dataObj = dataObj
                         allData += data ?? []
                         if allData.count == resourceCount {
                             dataObj?.data = allData
-                            completion(dataObj, nil)
+                            completion(dataObj, error)
                         }
                     }
                 }

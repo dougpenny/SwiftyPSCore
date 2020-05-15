@@ -79,7 +79,15 @@ extension SwiftyPowerSchool {
         }
     }
 
-    public func resourceCount(path: String, completion: @escaping (Int?, Error?) -> Void) {
+    /**
+     Retrieve the count of a resource.
+
+     - parameters:
+       - path: The path of the resource
+       - count: An optional count
+       - error: An optional error
+     */
+    public func resourceCount(path: String, completion: @escaping (_ count: Int?, _ error: Error?) -> Void) {
         fetchData(path: path + "/count", model: ResourceCount.self, method: "GET") {resourceCount, error in
             let count = resourceCount?.count
             completion(count, error)
