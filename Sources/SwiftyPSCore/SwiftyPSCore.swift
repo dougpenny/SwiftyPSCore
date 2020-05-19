@@ -1,5 +1,5 @@
 //
-//    SwiftyPowerSchool.swift
+//    SwiftyPSCore.swift
 //
 //    Copyright (c) 2018 Cooper Edmunds & Doug Penny – North Raleigh Christian Academy
 //
@@ -28,7 +28,7 @@ public protocol Pagable: Codable {
     var data: [Model]? { get set }
 }
 
-public class SwiftyPowerSchool {
+public class SwiftyPSCore {
     let baseURL: URL?
     let clientID: String
     let clientSecret: String

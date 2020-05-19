@@ -1,5 +1,5 @@
 //
-//    SwiftyPowerSchool-Extension.swift
+//    SwiftyPSCoreEndpoints.swift
 //
 //    Copyright (c) 2018 Cooper Edmunds & Doug Penny – North Raleigh Christian Academy
 //
@@ -23,7 +23,7 @@
 
 import Foundation
 
-extension SwiftyPowerSchool {
+extension SwiftyPSCore {
     /**
      Retrieve all courses from the given school for the current school year.
 

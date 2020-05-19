@@ -22,7 +22,7 @@
 //    SOFTWARE.
 
 import XCTest
-@testable import SwiftyPowerSchoolCore
+@testable import SwiftyPSCore
 
 
 class EndpointTests: XCTestCase {
@@ -34,7 +34,7 @@ class EndpointTests: XCTestCase {
             ("testSchoolsCount", testSchoolsCount)
         ]
 
-    var client: SwiftyPowerSchool!
+    var client: SwiftyPSCore!
     var params: TestingParameters!
 
     override func setUp() {
@@ -55,7 +55,7 @@ class EndpointTests: XCTestCase {
             do {
                 let paramData = try Data(contentsOf: paramFileURL)
                 self.params = try decoder.decode(TestingParameters.self, from: paramData)
-                self.client = SwiftyPowerSchool(self.params.baseURL,
+                self.client = SwiftyPSCore(self.params.baseURL,
                                                 clientID: self.params.clientID,
                                                 clientSecret: self.params.clientSecret)
             } catch let parseError {
@@ -88,7 +88,7 @@ class EndpointTests: XCTestCase {
                 }
             }
 
-            self.waitForExpectations(timeout: 1) { error in
+            self.waitForExpectations(timeout: 5) { error in
                 if let error = error {
                     XCTFail(error.localizedDescription)
                 }
