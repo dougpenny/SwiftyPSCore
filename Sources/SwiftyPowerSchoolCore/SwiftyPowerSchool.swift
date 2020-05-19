@@ -23,7 +23,7 @@
 
 import Foundation
 
-protocol Pagable: Codable {
+public protocol Pagable: Codable {
     associatedtype Model: Codable
     var data: [Model]? { get set }
 }
@@ -41,7 +41,7 @@ public class SwiftyPowerSchool {
         self.clientSecret = clientSecret
     }
 
-    func metadata(completion: @escaping (Metadata?, Error?) -> Void) {
+    public func metadata(completion: @escaping (Metadata?, Error?) -> Void) {
         if self.metadata != nil {
             completion(self.metadata, nil)
         } else {
@@ -57,11 +57,11 @@ public class SwiftyPowerSchool {
         }
     }
 
-    func fetchData<Model: Pagable>(path: String,
-                                   model: Model.Type,
-                                   method: String = "GET",
-                                   params: [String: Any]? = nil,
-                                   completion: @escaping (Model?, Error?) -> Void) {
+    public func fetchData<Model: Pagable>(path: String,
+                                          model: Model.Type,
+                                          method: String = "GET",
+                                          params: [String: Any]? = nil,
+                                          completion: @escaping (Model?, Error?) -> Void) {
         var allData: [Model.Model] = []
         resourceCount(path: path) { resourceCount, error in
             if let resourceCount = resourceCount {
@@ -86,7 +86,7 @@ public class SwiftyPowerSchool {
         }
     }
 
-    func fetchData<Model: Codable>(path: String,
+    public func fetchData<Model: Codable>(path: String,
                                    model: Model.Type,
                                    method: String = "GET",
                                    params: [String: Any]? = nil,
@@ -120,7 +120,7 @@ public class SwiftyPowerSchool {
         }
     }
 
-    private func requestAuthToken(completion: @escaping (Bool, Error?) -> Void) {
+    fileprivate func requestAuthToken(completion: @escaping (Bool, Error?) -> Void) {
         let concatCreds = self.clientID + ":" + self.clientSecret
         guard let utf8Creds = concatCreds.data(using: .utf8) else {
             completion(false, nil)
@@ -148,7 +148,7 @@ public class SwiftyPowerSchool {
         }
     }
 
-    internal func dataTask(request: URLRequest,
+    fileprivate func dataTask(request: URLRequest,
                            method: String,
                            completion: @escaping (Data?, Error?) -> Void) {
         var request = request
@@ -163,7 +163,7 @@ public class SwiftyPowerSchool {
         task.resume()
     }
 
-    internal func clientURLRequest(path: String,
+    fileprivate func clientURLRequest(path: String,
                                    method: String,
                                    params: [String: Any]? = nil,
                                    completion: @escaping (URLRequest?, Error?) -> Void) {

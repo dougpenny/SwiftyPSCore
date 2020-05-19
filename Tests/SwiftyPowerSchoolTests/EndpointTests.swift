@@ -27,6 +27,8 @@ import XCTest
 
 class EndpointTests: XCTestCase {
     static var allTests = [
+            ("testEnrollmentsForSections", testEnrollmentsForSections),
+            ("testRetrieveAllStudents", testRetrieveAllStudents),
             ("testSchoolsCount", testSchoolsCount),
             ("testSectionsForSchool", testSectionsForSchool),
             ("testSchoolsCount", testSchoolsCount)
@@ -61,6 +63,38 @@ class EndpointTests: XCTestCase {
             }
         } else {
             print("File not found!")
+        }
+    }
+    
+    func testEnrollmentsForSections() {
+        if let testSection = self.params.testSection {
+            let enrollmentsForSectionsExpectation = self.expectation(description: "get section enrollments")
+
+            client.enrollmentsForSections([testSection.sectionDCID]) { enrollments, error in
+                if let enrollments = enrollments {
+                    if let testEnrollments = testSection.enrollments {
+                        XCTAssertEqual(testEnrollments[0].dcid, enrollments[0].dcid)
+                        XCTAssertEqual(testEnrollments[0].gradeLevel, enrollments[0].gradeLevel)
+                        XCTAssertEqual(testEnrollments[0].lastFirst, enrollments[0].lastFirst)
+                        XCTAssertEqual(testEnrollments[1].studentNumber, enrollments[1].studentNumber)
+                        XCTAssertEqual(testEnrollments[1].gender, enrollments[1].gender)
+                        XCTAssertEqual(testEnrollments[1].id, enrollments[1].id)
+                        enrollmentsForSectionsExpectation.fulfill()
+                    } else {
+                        XCTFail(error?.localizedDescription ?? "There were no test section enrollments defined.")
+                    }
+                } else {
+                    XCTFail(error?.localizedDescription ?? "An error occured retreiving the section enrollments.")
+                }
+            }
+
+            self.waitForExpectations(timeout: 1) { error in
+                if let error = error {
+                    XCTFail(error.localizedDescription)
+                }
+            }
+        } else {
+            XCTFail("No test section found.")
         }
     }
     

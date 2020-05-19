@@ -22,7 +22,7 @@
 //    SOFTWARE.
 
 public struct PowerQuerySections: Codable {
-    let data: [SectionInfo]?
+    public let data: [SectionInfo]?
 
     enum CodingKeys: String, CodingKey {
         case data = "record"

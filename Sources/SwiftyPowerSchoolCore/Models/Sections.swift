@@ -23,7 +23,7 @@
 
 public struct Sections: Pagable {
     private var sectionsWrapper: SectionContainer?
-    var data: [Section]? {
+    public var data: [Section]? {
         get { return sectionsWrapper?.sections }
         set { sectionsWrapper?.sections = newValue }
     }

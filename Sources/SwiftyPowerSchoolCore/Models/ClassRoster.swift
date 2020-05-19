@@ -22,7 +22,7 @@
 //    SOFTWARE.
 
 public struct ClassRoster: Codable {
-    let data: [StudentItem]?
+    public let data: [StudentItem]?
 
     enum CodingKeys: String, CodingKey {
         case data = "record"

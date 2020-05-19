@@ -23,7 +23,7 @@
 
 public struct Courses: Pagable {
     private var coursesWrapper: CourseContainer?
-    var data: [Course]? {
+    public var data: [Course]? {
         get { return self.coursesWrapper?.courses }
         set { coursesWrapper?.courses = newValue }
     }
