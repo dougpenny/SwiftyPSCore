@@ -4,7 +4,7 @@
 [![MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
 
-SwiftyPSCore is a pure Swift PowerSchool API client. Our goal is to simplify the process of communicating with the [PowerSchool Student Information System](https://www.powerschool.com/solutions/student-information-system-sis/) API by handling authentication and decoding, allowing you to focus on using the data, not retrieving it.
+SwiftyPSCore is a pure Swift PowerSchool API client. The goal is to simplify the process of communicating with the [PowerSchool Student Information System](https://www.powerschool.com/solutions/student-information-system-sis/) API by handling authentication and decoding, allowing you to focus on using the data, not retrieving it.
 
 _SwiftyPSCore is not endorsed, sponsored, or affilitated with PowerSchool in any way. Swift and the Swift logo are trademarks of Apple Inc._
 
