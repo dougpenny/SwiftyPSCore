@@ -4,5 +4,5 @@
 /Packages
 /*.xcodeproj
 Package.resolved
-/Tests/SwiftyPowerSchoolTests/testing_parameters.json
+/Tests/SwiftyPSCoreTests/testing_parameters.json
 
