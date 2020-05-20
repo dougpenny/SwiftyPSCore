@@ -23,7 +23,7 @@ _SwiftyPSCore is not endorsed, sponsored, or affilitated with PowerSchool in any
 ---
 
 ## Installation
-Before using _SwiftyPSCore_ in your application, you will first need to create and install a Plugin XML file for your PowerSchool server. Information about creating the plugin file can be found on the [PowerSchool Developer Support](https://support.powerschool.com/developer/#/page/plugin-xml) site. We have created an example plugin ([SwiftyPowerSchoolCore-Plugin](https://github.com/NRCA/SwiftyPowerSchool-Plugin)) that you can use as is, or modify as you see fit. Once you have installed the plugin, you will be provided a client ID and client secret that you will use for authenticating with the PowerSchool server.
+Before using _SwiftyPSCore_ in your application, you will first need to create and install a Plugin XML file for your PowerSchool server. Information about creating the plugin file can be found on the [PowerSchool Developer Support](https://support.powerschool.com/developer/#/page/plugin-xml) site. We have created an example plugin ([SwiftyPSCorePlugin](https://github.com/NRCA/SwiftyPSCorePlugin)) that you can use as is, or modify as you see fit. Once you have installed the plugin, you will be provided a client ID and client secret that you will use for authenticating with the PowerSchool server.
 
 ### Swift Package Manager
 To include SwiftyPSCore in a [Swift Package Manager](https://swift.org/package-manager/) package, add it to the `dependencies` attribute defined in your `Package.swift` file. For example:
@@ -36,9 +36,7 @@ dependencies: [
 ---
 
 ## Usage
-You could hard code your base URL, client ID and client secret into your code, but a better option might be to set environment variables for these.
-
-First, fetch the environment variables and instantiate a client:
+Set environment variables for your base URL, client ID, and client secret. Then, in your code, fetch the environment variables and instantiate a client:
 ```swift
 if let baseURL = ProcessInfo.processInfo.environment["BASE_URL"],
     let clientID = ProcessInfo.processInfo.environment["CLIENT_ID"],
@@ -128,7 +126,9 @@ client.sectionsForTeacher(testTeacher.teacherID) { sections, error in
 
 
 ### PowerQueries
-PowerQueries are a feature that allows you create custom API endpoints. You define the data to be returned and write a SQL select statement to fetch the data. PowerQueries are created through the PowerSchool plugin interface. You can see an example of one in our sample PowerSchool plugin, [SwiftyPowerSchool-Plugin](https://github.com/NRCA/SwiftyPowerSchool-Plugin). You can learn more about PowerQueries on the [PowerSchool Developer Support](https://support.powerschool.com/developer/#/page/powerqueries) site.
+PowerQueries are a feature that allows you create custom API endpoints. SwiftyPSCore only includes core endpoints and PowerQueries provided directly by PowerSchool. To add additional core PowerQueries to SwiftyPSCore, you will need to modify the plugin file ([SwiftyPSCorePlugin](https://github.com/NRCA/SwiftyPSCorePlugin)) with the proper <[access-request](https://support.powerschool.com/developer/#/page/access-request)> elements.
+
+If you are interested in creating your own, custom PowerQueries, see our companion package, SwiftyPSCustomQueries, and the corresponding plugin, SwiftyPSCustomQueriesPlugin.
 
 ## Contributing
 If you have a feature or idea you would like to see added to SwiftyPSCore, please [create an issue](https://github.com/NRCA/SwiftyPSCore/issues/new) explaining your idea with as much detail as possible.
