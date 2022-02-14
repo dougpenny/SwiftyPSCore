@@ -36,17 +36,7 @@ class PowerQueryTests: XCTestCase {
     override func setUp() {
         super.setUp()
         print("EndpointTests setup called--")
-        /**
-         This is a temporary workaround becuase Swift packages do not currently support resources. This will be
-         resolved in Swift 5.3: https://github.com/apple/swift-evolution/blob/master/proposals/0271-package-manager-resources.md
-         
-         The following 4 lines can be replaced with the following single line of code:
-         if let paramFilePath = Bundle(for: type(of: self)).path(forResource: "testing_parameters", ofType: "json")
-         */
-        let thisSourceFile = URL(fileURLWithPath: #file)
-        let thisDirectory = thisSourceFile.deletingLastPathComponent()
-        let paramFileURL = thisDirectory.appendingPathComponent("testing_parameters.json")
-        if paramFileURL != URL(fileURLWithPath: "") {
+        if let paramFileURL = Bundle.module.url(forResource: "testing_parameters", withExtension: "json") {
             let decoder = JSONDecoder()
             do {
                 let paramData = try Data(contentsOf: paramFileURL)

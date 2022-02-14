@@ -1,16 +1,23 @@
-// swift-tools-version:4.0
+// swift-tools-version:5.5
 
 import PackageDescription
 
 let package = Package(
     name: "SwiftyPSCore",
     products: [
-        .library(name: "SwiftyPSCore", targets: ["SwiftyPSCore"])
-    ],
-    dependencies: [
+        .library(
+            name: "SwiftyPSCore",
+            targets: ["SwiftyPSCore"]
+        )
     ],
     targets: [
-        .target(name: "SwiftyPSCore", dependencies: []),
-        .testTarget(name: "SwiftyPSCoreTests", dependencies: ["SwiftyPSCore"])
+        .target(
+            name: "SwiftyPSCore"
+        ),
+        .testTarget(
+            name: "SwiftyPSCoreTests",
+            dependencies: ["SwiftyPSCore"],
+            resources: [.process("Resources")]
+        )
     ]
 )
