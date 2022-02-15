@@ -26,85 +26,74 @@ import Foundation
 extension SwiftyPSCore {
     /**
      Retrieve all courses from the given school for the current school year.
-
-     - parameters:
+     - Parameters:
        - schoolID: The school DCID (not the ID or school number)
-       - courses: An optional array of Courses
-       - error: An optional error
+     - Returns: An optional array of Courses
      */
-    public func coursesForSchool(_ schoolID: Int, completion: @escaping (_ courses: [Course]?, _ error: Error?) -> Void) {
+    public func coursesForSchool(_ schoolID: Int) async throws -> [Course]? {
         let path = "/ws/v1/school/\(schoolID)/course"
-        fetchData(path: path, model: Courses.self) { coursesObj, error in
-            completion(coursesObj?.data, error)
-        }
+        let coursesObj = try await fetchData(path: path, model: Courses.self)
+        return coursesObj?.data
     }
 
     /**
      Retrieve the count of a resource.
-
-     - parameters:
+     - Parameters:
        - path: The path of the resource
-       - count: An optional count
-       - error: An optional error
+     - Returns: An optional count
      */
-    public func resourceCount(path: String, completion: @escaping (_ count: Int?, _ error: Error?) -> Void) {
-        fetchData(path: path + "/count", model: ResourceCount.self, method: "GET") {resourceCount, error in
-            let count = resourceCount?.count
-            completion(count, error)
-        }
+    public func resourceCount(path: String) async throws -> Int? {
+        let resourceCount = try await fetchData(path: "\(path)/count", model: ResourceCount.self)
+        return resourceCount?.count
     }
 
     /**
-     Retrieve all schools that are in the current district. Schools are sorted by name.
-
-     - parameters:
-       - schools: An optional array of Schools
-       - error: An optional error
+     Retrieve all schools in the current district. Schools are sorted by name.
+     - Returns: An optional array of Schools
      */
-    public func schools(completion: @escaping (_ schools: [School]?, _ error: Error?) -> Void) {
+    public func schools() async throws -> [School]? {
         let basePath = "/ws/v1/district/school"
-        self.fetchData(path: basePath, model: Schools.self) { schoolsObj, error in
-            completion(schoolsObj?.data, error)
-        }
+        let schoolsObj = try await fetchData(path: basePath, model: Schools.self)
+        return schoolsObj?.data
     }
 
-    public func schoolsCount(completion: @escaping (Int?, Error?) -> Void) {
+    /**
+     Retrieve the number of schools in the current district.
+     - Returns: An optional number of schools
+     */
+    public func schoolsCount() async throws -> Int? {
         let path = "/ws/v1/district/school"
-        resourceCount(path: path, completion: completion)
+        return try await resourceCount(path: path)
     }
 
-    public func sectionsCountForSchool(_ schoolID: Int, completion: @escaping (Int?, Error?) -> Void) {
+    /**
+     Retrieve the number of sections in a given school.
+     - Returns: An optional number of sections
+     */
+    public func sectionsCountForSchool(_ schoolID: Int) async throws -> Int? {
         let path = "/ws/v1/school/\(schoolID)/section"
-        resourceCount(path: path, completion: completion)
+        return try await resourceCount(path: path)
     }
 
     /**
      Retrieve all sections from the given school for the current school year.
-     
-     - parameters:
+     - Parameters:
        - schoolID: The school DCID (not the ID or school number)
-       - sections: An optional array of Sections
-       - error: An optional error
+     - Returns: An optional array of Sections
     */
-    public func sectionsForSchool(_ schoolID: Int, completion: @escaping (_ sections: [Section]?, _ error: Error?) -> Void) {
+    public func sectionsForSchool(_ schoolID: Int) async throws -> [Section]? {
         let basePath = "/ws/v1/school/\(schoolID)/section"
-        self.fetchData(path: basePath, model: Sections.self) { sectionsObj, error in
-            completion(sectionsObj?.data, error)
-        }
+        let sectionsObj = try await fetchData(path: basePath, model: Sections.self)
+        return sectionsObj?.data
     }
 
     /**
      Retrieve all students in the current district.
-
-     - returns:
-        - students: An optional array of Student structs
-        - error: An optional error
+     - Returns: An optional array of Student structs
      */
-    public func studentsInDistrict(completion: @escaping (_ students: [Student]?, _ error: Error?) -> Void) {
+    public func studentsInDistrict() async throws -> [Student]? {
         let path = "/ws/v1/district/student"
-        fetchData(path: path, model: Students.self) {studentsObj, error in
-            let students = studentsObj?.data
-            completion(students, error)
-        }
+        let studentsObj = try await fetchData(path: path, model: Students.self)
+        return studentsObj?.data
     }
 }

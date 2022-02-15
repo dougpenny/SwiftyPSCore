@@ -26,19 +26,14 @@ import Foundation
 extension SwiftyPSCore {
     /**
      Retrieve the distinct student enrollments for the given sections.
-
      - Important: PowerQuery Endpoint
-     - parameters:
+     - Parameters:
        - sectionID: An array of section DCIDs (not the ID or section number)
-       - studentItem: An optional array of PowerQueryStudents
-       - error: An optional error
+     - Returns: An optional array of PowerQueryStudents
      */
-    public func enrollmentsForSections(_ sectionID: [String], completion: @escaping (_ studentItem: [StudentItem]?, _ error: Error?) -> Void) {
+    public func enrollmentsForSections(_ sectionID: [String]) async throws -> [StudentItem]? {
         let path = "/ws/schema/query/com.pearson.core.teachers.sectionEnrollments"
-        fetchData(path: path, model: ClassRoster.self, method: "POST",
-                  params: ["section_dcid": sectionID]) {rosterObj, error in
-                    let classRoster = rosterObj?.data
-                    completion(classRoster, error)
-        }
+        let rosterObj = try await fetchData(path: path, model: ClassRoster.self, method: "POST", params: ["section_dcid": sectionID])
+        return rosterObj?.data
     }
 }

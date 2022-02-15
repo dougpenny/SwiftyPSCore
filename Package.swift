@@ -4,6 +4,9 @@ import PackageDescription
 
 let package = Package(
     name: "SwiftyPSCore",
+    platforms: [
+        .macOS(.v12)
+    ],
     products: [
         .library(
             name: "SwiftyPSCore",
@@ -19,6 +22,5 @@ let package = Package(
             dependencies: ["SwiftyPSCore"],
             resources: [.process("Resources")]
         )
-    ],
-    swiftLanguageVersions: [.v5]
+    ]
 )

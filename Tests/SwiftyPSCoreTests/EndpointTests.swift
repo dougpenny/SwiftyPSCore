@@ -24,7 +24,6 @@
 import XCTest
 @testable import SwiftyPSCore
 
-
 class EndpointTests: XCTestCase {
     static var allTests = [
             ("testRetrieveAllStudents", testRetrieveAllStudents),
@@ -55,101 +54,65 @@ class EndpointTests: XCTestCase {
         }
     }
     
-    func testRetrieveAllStudents() {
+    func testRetrieveAllStudents() async throws {
         if let testStudents = self.params.testStudents {
-            let studentsExpectation = self.expectation(description: "get all students")
-
-            client.studentsInDistrict { students, error in
-                if let students = students {
-                    XCTAssertEqual(testStudents[0].dcid, students[0].dcid)
-                    XCTAssertEqual(testStudents[0].studentNumber, students[0].studentNumber)
-                    XCTAssertEqual(testStudents[0].name?.firstName, students[0].name?.firstName)
-                    XCTAssertEqual(testStudents[0].name?.middleName, students[0].name?.middleName)
-                    XCTAssertEqual(testStudents[0].name?.lastName, students[0].name?.lastName)
-                    XCTAssertEqual(testStudents[1].dcid, students[1].dcid)
-                    XCTAssertEqual(testStudents[1].studentNumber, students[1].studentNumber)
-                    XCTAssertEqual(testStudents[1].studentUsername, students[1].studentUsername)
-                    XCTAssertEqual(testStudents[1].name?.firstName, students[1].name?.firstName)
-                    XCTAssertEqual(testStudents[1].name?.middleName, students[1].name?.middleName)
-                    XCTAssertEqual(testStudents[1].name?.lastName, students[1].name?.lastName)
-                    XCTAssertEqual(testStudents[2].dcid, students[2].dcid)
-                    XCTAssertEqual(testStudents[2].studentNumber, students[2].studentNumber)
-                    XCTAssertEqual(testStudents[2].studentUsername, students[2].studentUsername)
-                    XCTAssertEqual(testStudents[2].name?.firstName, students[2].name?.firstName)
-                    XCTAssertEqual(testStudents[2].name?.middleName, students[2].name?.middleName)
-                    XCTAssertEqual(testStudents[2].name?.lastName, students[2].name?.lastName)
-                    XCTAssertEqual(testStudents[3].dcid, students[3].dcid)
-                    XCTAssertEqual(testStudents[3].studentNumber, students[3].studentNumber)
-                    XCTAssertEqual(testStudents[3].studentUsername, students[3].studentUsername)
-                    XCTAssertEqual(testStudents[3].name?.firstName, students[3].name?.firstName)
-                    XCTAssertEqual(testStudents[3].name?.middleName, students[3].name?.middleName)
-                    XCTAssertEqual(testStudents[3].name?.lastName, students[3].name?.lastName)
-                    XCTAssertEqual(testStudents[4].dcid, students[4].dcid)
-                    XCTAssertEqual(testStudents[4].studentNumber, students[4].studentNumber)
-                    XCTAssertEqual(testStudents[4].studentUsername, students[4].studentUsername)
-                    XCTAssertEqual(testStudents[4].name?.firstName, students[4].name?.firstName)
-                    XCTAssertEqual(testStudents[4].name?.middleName, students[4].name?.middleName)
-                    XCTAssertEqual(testStudents[4].name?.lastName, students[4].name?.lastName)
-                    studentsExpectation.fulfill()
-                } else {
-                    XCTFail(error?.localizedDescription ?? "An error occured retreiving the students.")
-                }
-            }
-
-            self.waitForExpectations(timeout: 5) { error in
-                if let error = error {
-                    XCTFail(error.localizedDescription)
-                }
+            if let students = try await client.studentsInDistrict() {
+                XCTAssertEqual(testStudents[0].dcid, students[0].dcid)
+                XCTAssertEqual(testStudents[0].studentNumber, students[0].studentNumber)
+                XCTAssertEqual(testStudents[0].name?.firstName, students[0].name?.firstName)
+                XCTAssertEqual(testStudents[0].name?.middleName, students[0].name?.middleName)
+                XCTAssertEqual(testStudents[0].name?.lastName, students[0].name?.lastName)
+                XCTAssertEqual(testStudents[1].dcid, students[1].dcid)
+                XCTAssertEqual(testStudents[1].studentNumber, students[1].studentNumber)
+                XCTAssertEqual(testStudents[1].studentUsername, students[1].studentUsername)
+                XCTAssertEqual(testStudents[1].name?.firstName, students[1].name?.firstName)
+                XCTAssertEqual(testStudents[1].name?.middleName, students[1].name?.middleName)
+                XCTAssertEqual(testStudents[1].name?.lastName, students[1].name?.lastName)
+                XCTAssertEqual(testStudents[2].dcid, students[2].dcid)
+                XCTAssertEqual(testStudents[2].studentNumber, students[2].studentNumber)
+                XCTAssertEqual(testStudents[2].studentUsername, students[2].studentUsername)
+                XCTAssertEqual(testStudents[2].name?.firstName, students[2].name?.firstName)
+                XCTAssertEqual(testStudents[2].name?.middleName, students[2].name?.middleName)
+                XCTAssertEqual(testStudents[2].name?.lastName, students[2].name?.lastName)
+                XCTAssertEqual(testStudents[3].dcid, students[3].dcid)
+                XCTAssertEqual(testStudents[3].studentNumber, students[3].studentNumber)
+                XCTAssertEqual(testStudents[3].studentUsername, students[3].studentUsername)
+                XCTAssertEqual(testStudents[3].name?.firstName, students[3].name?.firstName)
+                XCTAssertEqual(testStudents[3].name?.middleName, students[3].name?.middleName)
+                XCTAssertEqual(testStudents[3].name?.lastName, students[3].name?.lastName)
+                XCTAssertEqual(testStudents[4].dcid, students[4].dcid)
+                XCTAssertEqual(testStudents[4].studentNumber, students[4].studentNumber)
+                XCTAssertEqual(testStudents[4].studentUsername, students[4].studentUsername)
+                XCTAssertEqual(testStudents[4].name?.firstName, students[4].name?.firstName)
+                XCTAssertEqual(testStudents[4].name?.middleName, students[4].name?.middleName)
+                XCTAssertEqual(testStudents[4].name?.lastName, students[4].name?.lastName)
+            } else {
+                XCTFail("An error occured retreiving the students.")
             }
         } else {
             XCTFail("No test students found.")
         }
     }
 
-    func testSchoolsCount() {
-        let schoolsCountExpectation = self.expectation(description: "get schools count")
-
-        client.schoolsCount { schoolsCount, error in
-            if let schoolsCount = schoolsCount {
-                if let testCount = self.params.schoolsCount {
-                    XCTAssertEqual(testCount, schoolsCount)
-                    schoolsCountExpectation.fulfill()
-                } else {
-                    XCTFail(error?.localizedDescription ?? "A schools count test item was not defined.")
-                }
+    func testSchoolsCount() async throws {
+        if let schoolsCount = try await client.schoolsCount() {
+            if let testCount = self.params.schoolsCount {
+                XCTAssertEqual(testCount, schoolsCount)
             } else {
-                XCTFail(error?.localizedDescription ?? "An error occured retreiving the schools count.")
+                    XCTFail("A schools count test item was not defined.")
             }
-        }
-
-        self.waitForExpectations(timeout: 1) { error in
-            if let error = error {
-                XCTFail(error.localizedDescription)
-            }
+        } else {
+            XCTFail("An error occured retreiving the schools count.")
         }
     }
 
-    func testSectionsForSchool() {
-        let schoolSectionsExpectation = self.expectation(description: "get sections for school")
-        
-        client.sectionsForSchool(1) { sections, error in
-            if let sections = sections {
-                self.client.sectionsCountForSchool(1) { sectionsCount, error in
-                    if let sectionsCount = sectionsCount {
-                        XCTAssertEqual(sections.count, sectionsCount)
-                        schoolSectionsExpectation.fulfill()
-                    }
-                }
+    func testSectionsForSchool() async throws {
+        if let sections = try await client.sectionsForSchool(1) {
+            if let sectionsCount = try await self.client.sectionsCountForSchool(1) {
+                XCTAssertEqual(sections.count, sectionsCount)
             }
-            else {
-                XCTFail()
-            }
-        }
-        
-        self.waitForExpectations(timeout: 5) { error in
-            if let error = error {
-                XCTFail(error.localizedDescription)
-            }
+        } else {
+            XCTFail()
         }
     }
 }

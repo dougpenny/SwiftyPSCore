@@ -41,132 +41,85 @@ public class SwiftyPSCore {
         self.clientSecret = clientSecret
     }
 
-    public func metadata(completion: @escaping (Metadata?, Error?) -> Void) {
+    public func metadata() async throws -> Metadata? {
         if self.metadata != nil {
-            completion(self.metadata, nil)
+            return self.metadata
         } else {
             let path = (baseURL?.absoluteString)! + "/ws/v1/metadata"
-            self.fetchData(path: path, model: Metadata.self) { metadataObject, error in
-                if let metadataObject = metadataObject {
-                    self.metadata = metadataObject
-                    completion(self.metadata, error)
-                } else {
-                    completion(nil, error)
-                }
-            }
+            return try await self.fetchData(path: path, model: Metadata.self)
         }
     }
-
+    
     public func fetchData<Model: Pagable>(path: String,
                                           model: Model.Type,
                                           method: String = "GET",
-                                          params: [String: Any]? = nil,
-                                          completion: @escaping (Model?, Error?) -> Void) {
+                                          params: [String: Any]? = nil) async throws -> Model? {
         var allData: [Model.Model] = []
-        resourceCount(path: path) { resourceCount, error in
-            if let resourceCount = resourceCount {
-                let pageSize = 50
-                let numberOfPages = (resourceCount + pageSize - 1)/pageSize
-                for page in 1...numberOfPages {
-                    let fullPath = path + "?pagesize=\(pageSize)&page=\(page)"
-                    self.genericFetchData(path: fullPath, model: model) { dataObj, error in
-                        if error != nil { completion(nil, error) }
-                        let data = dataObj?.data
-                        var dataObj = dataObj
-                        allData += data ?? []
-                        if allData.count == resourceCount {
-                            dataObj?.data = allData
-                            completion(dataObj, error)
-                        }
-                    }
+        if let resourceCount = try await resourceCount(path: path) {
+            let pageSize = 50
+            let numberOfPages = (resourceCount + pageSize - 1)/pageSize
+            for page in 1...numberOfPages {
+                let fullPath = path + "?pagesize=\(pageSize)&page=\(page)"
+                var dataObj = try await self.genericFetchData(path: fullPath, model: model)
+                let data = dataObj?.data
+                allData += data ?? []
+                if allData.count == resourceCount {
+                    dataObj?.data = allData
+                    return dataObj
                 }
-            } else {
-                completion(nil, error)
             }
         }
+        
+        return nil
     }
-
+    
     public func fetchData<Model: Codable>(path: String,
                                    model: Model.Type,
                                    method: String = "GET",
-                                   params: [String: Any]? = nil,
-                                   completion: @escaping (Model?, Error?) -> Void) {
-        genericFetchData(path: path, model: model, method: method, params: params, completion: completion)
+                                   params: [String: Any]? = nil) async throws -> Model? {
+        return try await genericFetchData(path: path, model: model, method: method, params: params)
     }
-
+    
     fileprivate func genericFetchData<Model: Codable>(path: String,
                                                       model: Model.Type,
                                                       method: String = "GET",
-                                                      params: [String: Any]? = nil,
-                                                      completion: @escaping (Model?, Error?) -> Void) {
-        clientURLRequest(path: path, method: method, params: params) { request, error in
-            if let request = request {
-                self.dataTask(request: request, method: method) { data, error in
-                    if let data = data {
-                        let decoder = JSONDecoder()
-                        do {
-                            let object = try decoder.decode(model.self, from: data)
-                            completion(object, nil)
-                        } catch let parseError {
-                            completion(nil, parseError)
-                        }
-                    } else {
-                        completion(nil, error)
-                    }
-                }
-            } else {
-                completion(nil, error)
-            }
-        }
+                                                      params: [String: Any]? = nil) async throws -> Model? {
+        let request = try await clientURLRequest(path: path, method: method, params: params)
+        let data = try await dataTask(request: request, method: method)
+        
+        return try JSONDecoder().decode(model.self, from: data)
     }
-
-    fileprivate func requestAuthToken(completion: @escaping (Bool, Error?) -> Void) {
+    
+    fileprivate func requestAuthToken() async throws -> Bool {
         let concatCreds = self.clientID + ":" + self.clientSecret
-        guard let utf8Creds = concatCreds.data(using: .utf8) else {
-            completion(false, nil)
-            return
+        if let utf8Creds = concatCreds.data(using: .utf8) {
+            let base64Creds = utf8Creds.base64EncodedString()
+            var request = URLRequest(url: URL(string: "/oauth/access_token/", relativeTo: self.baseURL)!)
+            request.setValue("Basic " + base64Creds, forHTTPHeaderField: "Authorization")
+            request.setValue("application/x-www-form-urlencoded;charset=UTF-8", forHTTPHeaderField: "Content-Type")
+            request.setValue("application/json", forHTTPHeaderField: "Accept")
+            request.httpBody = "grant_type=client_credentials".data(using: .utf8)!
+            
+            let tokenData = try await dataTask(request: request, method: "POST")
+            let authToken = try JSONDecoder().decode(Token.self, from: tokenData)
+            self.token = authToken
+            return true
         }
-        let base64Creds = utf8Creds.base64EncodedString()
-        var request = URLRequest(url: URL(string: "/oauth/access_token/", relativeTo: self.baseURL)!)
-        request.setValue("Basic " + base64Creds, forHTTPHeaderField: "Authorization")
-        request.setValue("application/x-www-form-urlencoded;charset=UTF-8", forHTTPHeaderField: "Content-Type")
-        request.setValue("application/json", forHTTPHeaderField: "Accept")
-        request.httpBody = "grant_type=client_credentials".data(using: .utf8)!
-        dataTask(request: request, method: "POST") { tokenData, error in
-            if let tokenData = tokenData {
-                let decoder = JSONDecoder()
-                do {
-                    let authToken = try decoder.decode(Token.self, from: tokenData)
-                    self.token = authToken
-                    completion(true, nil)
-                } catch let parseError {
-                    completion(false, parseError)
-                }
-            } else {
-                completion(false, error)
-            }
+        else {
+            print("An error occured creating credential string.")
+            return false
         }
     }
-
-    fileprivate func dataTask(request: URLRequest,
-                           method: String,
-                           completion: @escaping (Data?, Error?) -> Void) {
+    
+    fileprivate func dataTask(request: URLRequest, method: String) async throws -> Data {
         var request = request
         request.httpMethod = method
-        let task = URLSession.shared.dataTask(with: request) {data, response, error in
-            guard let data = data, let response = response as? HTTPURLResponse, response.statusCode == 200 else {
-                completion(nil, error)
-                return
-            }
-            completion(data, error)
-        }
-        task.resume()
+        
+        let (data, _) = try await URLSession.shared.data(for: request)
+        return data
     }
-
-    fileprivate func clientURLRequest(path: String,
-                                   method: String,
-                                   params: [String: Any]? = nil,
-                                   completion: @escaping (URLRequest?, Error?) -> Void) {
+    
+    fileprivate func clientURLRequest(path: String, method: String, params: [String: Any]? = nil) async throws -> URLRequest {
         let requestURL = URL(string: path, relativeTo: self.baseURL)!
         var request = URLRequest(url: requestURL)
         request.httpMethod = method
@@ -194,20 +147,14 @@ public class SwiftyPSCore {
 
         if let token = self.token, !token.isExpired {
             request.setValue(token.tokenType + " " + token.accessToken, forHTTPHeaderField: "Authorization")
-            completion(request, nil)
         } else {
-            self.requestAuthToken(completion: { success, error in
-                if success {
-                    if let token = self.token {
-                        request.setValue(token.tokenType + " " + token.accessToken, forHTTPHeaderField: "Authorization")
-                        completion(request, nil)
-                    } else {
-                        completion(nil, error)
-                    }
-                } else {
-                    completion(nil, error)
+            if try await self.requestAuthToken() {
+                if let token = self.token {
+                    request.setValue(token.tokenType + " " + token.accessToken, forHTTPHeaderField: "Authorization")
                 }
-            })
+            }
         }
+        
+        return request
     }
 }
