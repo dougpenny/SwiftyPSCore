@@ -49,7 +49,7 @@ public class SwiftyPSCore {
             return try await self.fetchData(path: path, model: Metadata.self)
         }
     }
-    
+
     public func fetchData<Model: Pagable>(path: String,
                                           model: Model.Type,
                                           method: String = "GET",
@@ -69,27 +69,27 @@ public class SwiftyPSCore {
                 }
             }
         }
-        
+
         return nil
     }
-    
+
     public func fetchData<Model: Codable>(path: String,
-                                   model: Model.Type,
-                                   method: String = "GET",
-                                   params: [String: Any]? = nil) async throws -> Model? {
+                                          model: Model.Type,
+                                          method: String = "GET",
+                                          params: [String: Any]? = nil) async throws -> Model? {
         return try await genericFetchData(path: path, model: model, method: method, params: params)
     }
-    
+
     fileprivate func genericFetchData<Model: Codable>(path: String,
                                                       model: Model.Type,
                                                       method: String = "GET",
                                                       params: [String: Any]? = nil) async throws -> Model? {
         let request = try await clientURLRequest(path: path, method: method, params: params)
         let data = try await dataTask(request: request, method: method)
-        
+
         return try JSONDecoder().decode(model.self, from: data)
     }
-    
+
     fileprivate func requestAuthToken() async throws -> Bool {
         let concatCreds = self.clientID + ":" + self.clientSecret
         if let utf8Creds = concatCreds.data(using: .utf8) {
@@ -99,26 +99,25 @@ public class SwiftyPSCore {
             request.setValue("application/x-www-form-urlencoded;charset=UTF-8", forHTTPHeaderField: "Content-Type")
             request.setValue("application/json", forHTTPHeaderField: "Accept")
             request.httpBody = "grant_type=client_credentials".data(using: .utf8)!
-            
+
             let tokenData = try await dataTask(request: request, method: "POST")
             let authToken = try JSONDecoder().decode(Token.self, from: tokenData)
             self.token = authToken
             return true
-        }
-        else {
+        } else {
             print("An error occured creating credential string.")
             return false
         }
     }
-    
+
     fileprivate func dataTask(request: URLRequest, method: String) async throws -> Data {
         var request = request
         request.httpMethod = method
-        
+
         let (data, _) = try await URLSession.shared.data(for: request)
         return data
     }
-    
+
     fileprivate func clientURLRequest(path: String, method: String, params: [String: Any]? = nil) async throws -> URLRequest {
         let requestURL = URL(string: path, relativeTo: self.baseURL)!
         var request = URLRequest(url: requestURL)
@@ -154,7 +153,7 @@ public class SwiftyPSCore {
                 }
             }
         }
-        
+
         return request
     }
 }
