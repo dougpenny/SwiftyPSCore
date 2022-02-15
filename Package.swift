@@ -19,5 +19,6 @@ let package = Package(
             dependencies: ["SwiftyPSCore"],
             resources: [.process("Resources")]
         )
-    ]
+    ],
+    swiftLanguageVersions: [.v5]
 )

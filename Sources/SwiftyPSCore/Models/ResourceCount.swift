@@ -1,5 +1,5 @@
 //
-//    Schools.swift
+//    ResourceCount.swift
 //
 //    Copyright (c) 2018 Cooper Edmunds – North Raleigh Christian Academy
 //
