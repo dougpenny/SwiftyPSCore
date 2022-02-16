@@ -15,8 +15,8 @@ _SwiftyPSCore is not endorsed, sponsored, or affilitated with PowerSchool in any
 * [Installation](#installation)
   * [Swift Pacakge Manager](#swift-package-manager)
 * [Usage](#usage)
-  * [Examples](#schools)
-  * [PowerQueries](#powerqueries)
+  * [Examples](#examples)
+* [PowerQueries](#powerqueries)
 * [Contributing](#contributing)
   * [Endpoint Testing](#endpoint-testing)
 * [License](#license)
@@ -47,6 +47,7 @@ if let baseURL = ProcessInfo.processInfo.environment["BASE_URL"],
 ```
 
 Now you can use your client to retrieve many different resources. Below are a few examples:
+<a id="examples"></a>
 ### Number of sections in a school
 ```swift
 if let sections = try await client.sectionsForSchool(schoolID) {
