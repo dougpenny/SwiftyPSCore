@@ -65,7 +65,7 @@ if let students = try await client.studentsInDistrict() {
 }
 ```
 
-### PowerQueries
+## PowerQueries
 PowerQueries are a feature that allows for the creation of custom API endpoints. SwiftyPSCore only includes core endpoints and PowerQueries provided directly by PowerSchool. To add additional core PowerQueries to SwiftyPSCore, you will need to modify the plugin file ([SwiftyPSCorePlugin](https://github.com/NRCA/SwiftyPSCorePlugin)) with the proper <[access-request](https://support.powerschool.com/developer/#/page/access-request)> elements.
 
 If you are interested in creating your own, custom PowerQueries, see our companion package, SwiftyPSCustomQueries, and the corresponding plugin, SwiftyPSCustomQueriesPlugin.
