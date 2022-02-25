@@ -22,6 +22,9 @@
 //    SOFTWARE.
 
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 public protocol Pagable: Codable {
     associatedtype Model: Codable
