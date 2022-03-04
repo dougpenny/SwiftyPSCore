@@ -1,7 +1,7 @@
 //
 //    Metadata.swift
 //
-//    Copyright (c) 2018 Doug Penny – North Raleigh Christian Academy
+//    Copyright (c) 2018 Doug Penny and North Raleigh Christian Academy
 //
 //    Permission is hereby granted, free of charge, to any person obtaining a copy
 //    of this software and associated documentation files (the "Software"), to deal
