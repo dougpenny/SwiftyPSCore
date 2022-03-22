@@ -1,8 +1,8 @@
 ![SwiftyPSCore](Images/swiftypowerschool.png)
 
 [![MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fdougonecent%2FSwiftyPSCore%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/dougonecent/SwiftyPSCore)
-[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fdougonecent%2FSwiftyPSCore%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/dougonecent/SwiftyPSCore)
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fdougpenny%2FSwiftyPSCore%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/dougpenny/SwiftyPSCore)
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fdougpenny%2FSwiftyPSCore%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/dougpenny/SwiftyPSCore)
 
 
 SwiftyPSCore is a pure Swift PowerSchool API client. The goal is to simplify the process of communicating with the [PowerSchool Student Information System](https://www.powerschool.com/solutions/student-information-system-sis/) API by handling authentication and decoding, allowing you to focus on using the data, not retrieving it.
@@ -24,7 +24,7 @@ _SwiftyPSCore is not endorsed, sponsored, or affilitated with PowerSchool in any
 ---
 
 ## Installation
-Before using _SwiftyPSCore_ in your application, you will first need to create and install a Plugin XML file for your PowerSchool server. Information about creating the plugin file can be found on the [PowerSchool Developer Support](https://support.powerschool.com/developer/#/page/plugin-xml) site. We have created an example plugin ([SwiftyPSCorePlugin](https://github.com/dougonecent/SwiftyPSCorePlugin)) that you can use as is, or modify as you see fit. Once you have installed the plugin, you will be provided a client ID and client secret that you will use for authenticating with the PowerSchool server.
+Before using _SwiftyPSCore_ in your application, you will first need to create and install a Plugin XML file for your PowerSchool server. Information about creating the plugin file can be found on the [PowerSchool Developer Support](https://support.powerschool.com/developer/#/page/plugin-xml) site. We have created an example plugin ([PSDataAccessPlugin](https://github.com/dougpenny/PSDataAccessPlugin)) that you can use as is, or modify as you see fit. Once you have installed the plugin, you will be provided a client ID and client secret that you will use for authenticating with the PowerSchool server.
 
 ### Swift Package Manager
 To include SwiftyPSCore in a [Swift Package Manager](https://swift.org/package-manager/) package, add it to the `dependencies` attribute defined in your `Package.swift` file. For example:
@@ -67,7 +67,7 @@ if let students = try await client.studentsInDistrict() {
 ```
 
 ## PowerQueries
-PowerQueries are a feature that allows for the creation of custom API endpoints. SwiftyPSCore only includes core endpoints and PowerQueries provided directly by PowerSchool. To add additional core PowerQueries to SwiftyPSCore, you will need to modify the plugin file ([SwiftyPSCorePlugin](https://github.com/NRCA/SwiftyPSCorePlugin)) with the proper <[access-request](https://support.powerschool.com/developer/#/page/access-request)> elements.
+PowerQueries are a feature that allows for the creation of custom API endpoints. SwiftyPSCore only includes core endpoints and PowerQueries provided directly by PowerSchool. To add additional core PowerQueries to SwiftyPSCore, you will need to modify the plugin file ([PSDataAccessPlugin](https://github.com/dougpenny/PSDataAccessPlugin)) with the proper <[access-request](https://support.powerschool.com/developer/#/page/access-request)> elements.
 
 If you are interested in creating your own, custom PowerQueries, see our companion package, SwiftyPSCustomQueries, and the corresponding plugin, SwiftyPSCustomQueriesPlugin.
 
@@ -82,9 +82,9 @@ if let enrollments = try await client.enrollmentsForSections([testSection.sectio
 ```
 
 ## Contributing
-If you have a feature or idea you would like to see added to SwiftyPSCore, please [create an issue](https://github.com/NRCA/SwiftyPSCore/issues/new) explaining your idea with as much detail as possible.
+If you have a feature or idea you would like to see added to SwiftyPSCore, please [create an issue](https://github.com/dougpenny/SwiftyPSCore/issues/new) explaining your idea with as much detail as possible.
 
-If you come across a bug, please [create an issue](https://github.com/NRCA/SwiftyPSCore/issues/new) explaining the bug with as much detail as possible.
+If you come across a bug, please [create an issue](https://github.com/dougpenny/SwiftyPSCore/issues/new) explaining the bug with as much detail as possible.
 
 The PowerSchool API provides access to a lot of information and, unfortunately, we don't have time to research and implement every endpoint. We've tried to make it as easy as possible for you to extend the library and contribute your changes. The basics for adding a new endpoint are:
 
